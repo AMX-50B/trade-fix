@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lbx.tradefix.dao.TradeTiDBDao">
+
+    <select id="selectOrderOutBound" parameterType="com.lbx.tradefix.vo.query.OrderBoundQuery" resultType="com.lbx.tradefix.vo.OrderOutBoundVo">
+        select 	id,group_id,company_id,business_id,order_code,outbound_code,order_id,bill_type,modify_time
+            from h3_trade.t_order_outbound
+        where  id in
+            <foreach collection="outboundCodes" open="(" item="item" close=")" separator=",">
+                #{item}
+            </foreach>
+    </select>
+</mapper>

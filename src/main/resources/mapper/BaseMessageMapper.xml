@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lbx.tradefix.dao.BaseMessageDao">
+    <select id="selectOrgInfo" resultType="com.lbx.tradefix.vo.OrgInfo">
+        select id,org_code,org_name from h3_orgmanager.t_org_organization_base
+        where group_id = 10000 and org_code in
+            <foreach collection="orgCodes" open="(" close=")" separator="," item="item">
+                #{item}
+            </foreach>
+    </select>
+
+    <select id="selectWareInfo" resultType="com.lbx.tradefix.vo.WareInfoVo">
+        select id,ware_inside_code,group_id,ware_code from h3_ware.t_ware_group_base_info
+        where group_id = 10000 and ware_code in
+        <foreach collection="wareCodes" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

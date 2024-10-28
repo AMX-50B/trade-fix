@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lbx.tradefix.dao.TradeFixDao">
+
+    <select id="findByCondition" parameterType="com.lbx.tradefix.vo.query.FixDataQuery" resultType="com.lbx.tradefix.vo.FixDataVo">
+        select * from fix_data
+        <where> 1=1
+            <if test="billdate!=null">
+                and billdate = #{billdate}
+            </if>
+            <if test="billdateStart!=null">
+                and billdate >= #{billdateStart}
+            </if>
+            <if test="billdateEnd!=null">
+                and billdate &lt;= #{billdateEnd}
+            </if>
+            <if test="deptid!=null">
+                and deptid = #{deptid}
+            </if>
+            <if test="udfcode!=null">
+                and udfcode = #{udfcode}
+            </if>
+            <if test="erpNum!=null">
+                and erp_num  = #{erpNum}
+            </if>
+            <if test="diffNum!=null">
+                and diffNum  = #{diffNum}
+            </if>
+            <if test="ltDiffNum!=null">
+                and diffNum  &lt;  #{ltDiffNum}
+            </if>
+            <if test="status!=null">
+                and status  = #{status}
+            </if>
+        </where>
+    </select>
+    <update id="update" parameterType="com.lbx.tradefix.vo.FixDataVo">
+        update fix_data set status = #{status},result = #{remark}
+        where line = #{line}
+    </update>
+
+</mapper>
