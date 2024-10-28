@@ -24,6 +24,4 @@ public class OrderOutBoundService {
         return tiDBDao.selectOrderOutBound(query);
     }
 
-    public List<OtherGift>
-
 }
