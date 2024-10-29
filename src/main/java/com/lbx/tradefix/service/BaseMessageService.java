@@ -25,15 +25,15 @@ public class BaseMessageService {
     private BaseMessageDao baseMessageDao;
 
     @DS("tidb")
-    public Map<String,Long> getOrgMessage(Set<String> orgCodes) {
+    public Map<String,OrgInfo> getOrgMessage(Set<String> orgCodes) {
         OrgInfoQuery query = new OrgInfoQuery();
         query.setOrgCodes(new ArrayList<>(orgCodes));
         List<OrgInfo> orgList = baseMessageDao.selectOrgInfo(query);
-        Map<String,Long> orgMap ;
+        Map<String,OrgInfo> orgMap ;
         if(!CollectionUtils.isEmpty(orgList)){
             orgMap =  new HashMap<>(orgList.size());
             for(OrgInfo orgInfo : orgList){
-                orgMap.put(orgInfo.getOrgCode(),orgInfo.getId());
+                orgMap.put(orgInfo.getOrgCode(),orgInfo);
             }
         }else {
             orgMap =  new HashMap<>(0);

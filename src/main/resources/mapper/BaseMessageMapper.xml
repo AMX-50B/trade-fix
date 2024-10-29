@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lbx.tradefix.dao.BaseMessageDao">
     <select id="selectOrgInfo" resultType="com.lbx.tradefix.vo.OrgInfo">
-        select id,org_code,org_name from h3_orgmanager.t_org_organization_base
+        select id,org_code,org_name,parent_org_id from h3_orgmanager.t_org_organization_base
         where group_id = 10000 and org_code in
             <foreach collection="orgCodes" open="(" close=")" separator="," item="item">
                 #{item}

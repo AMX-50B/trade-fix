@@ -22,12 +22,12 @@ public class FixDataVo {
     private String name;
     private String billNo;
     private String billType;
-    private Integer sapNum;
-    private Integer erpNum;
+    private Double sapNum;
+    private Double erpNum;
     private String sapStatus;
     private String erpStatus;
     private String modifyTime;
-    private Integer diffNum;
+    private Double diffNum;
     private Integer status;
     private String remark;
 }

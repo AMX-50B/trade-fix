@@ -11,5 +11,8 @@ import java.util.List;
  **/
 @Data
 public class OrderBoundQuery extends OrderOutBoundVo {
-    List<String> outboundCodes;
+    private List<String> outboundCodes;
+    private List<String> orderCodes;
+    private String modifyTimeStart;
+    private String modifyTimeEnd;
 }

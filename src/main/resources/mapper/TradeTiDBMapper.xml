@@ -1,13 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lbx.tradefix.dao.TradeTiDBDao">
-
-    <select id="selectOrderOutBound" parameterType="com.lbx.tradefix.vo.query.OrderBoundQuery" resultType="com.lbx.tradefix.vo.OrderOutBoundVo">
-        select 	id,group_id,company_id,business_id,order_code,outbound_code,order_id,bill_type,modify_time
-            from h3_trade.t_order_outbound
-        where  id in
+    <select id="selectOrderOutBound" parameterType="com.lbx.tradefix.vo.query.OrderBoundQuery"
+            resultType="com.lbx.tradefix.vo.OrderOutBoundVo">
+        select id,group_id,company_id,business_id,order_code,outbound_code,order_id,bill_type,modify_time
+        from h3_trade.t_order_outbound
+        where group_id = 10000
+        <if test="companyId!=null">
+            and company_id = #{companyId}
+        </if>
+        <if test="businessId!=null">
+            and business_id = #{businessId}
+        </if>
+        <if test="orderCodes!=null">
+            and order_code in
+            <foreach collection="orderCodes" open="(" item="item" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="outboundCodes!=null">
+            and id in
             <foreach collection="outboundCodes" open="(" item="item" close=")" separator=",">
                 #{item}
             </foreach>
+        </if>
+
+    </select>
+
+    <select id="selectOrderSapMq" parameterType="com.lbx.tradefix.vo.query.OrderSapMqQuery"
+            resultType="com.lbx.tradefix.vo.OrderSapMqVo">
+        select id,group_id,company_id,business_id,bill_no,bill_type,state,version,modify_time,create_time,error_msg
+        from h3_trade.t_order_sap_mq_record
+        where group_id = 1000
+        <if test="companyId!=null">
+            and company_id = #{companyId}
+        </if>
+        <if test="businessId!=null">
+            and business_id = #{businessId}
+        </if>
+        <if test="modifyTimeStart!=null and modifyTimeEnd!=null">
+            and modify_time >= #{modifyTimeStart} and modify_time &lt;=#{modifyTimeEnd}
+        </if>
+
     </select>
 </mapper>

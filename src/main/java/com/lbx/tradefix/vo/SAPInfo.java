@@ -15,4 +15,6 @@ public class SAPInfo {
     private String goodsid;
     private Date billdate;
     private String pbseqid;
+    private String posbillno;
+    private Double total;
 }

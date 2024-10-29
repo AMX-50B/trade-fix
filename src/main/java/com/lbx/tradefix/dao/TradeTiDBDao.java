@@ -1,7 +1,9 @@
 package com.lbx.tradefix.dao;
 
 import com.lbx.tradefix.vo.OrderOutBoundVo;
+import com.lbx.tradefix.vo.OrderSapMqVo;
 import com.lbx.tradefix.vo.query.OrderBoundQuery;
+import com.lbx.tradefix.vo.query.OrderSapMqQuery;
 
 import java.util.List;
 
@@ -12,4 +14,6 @@ import java.util.List;
 public interface TradeTiDBDao {
 
     List<OrderOutBoundVo> selectOrderOutBound(OrderBoundQuery query);
+
+    List<OrderSapMqVo> selectOrderSapMq(OrderSapMqQuery query);
 }

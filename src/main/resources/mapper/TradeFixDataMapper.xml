@@ -32,6 +32,9 @@
             <if test="status!=null">
                 and status  = #{status}
             </if>
+            <if test="line!=null">
+                and line = #{line}
+            </if>
         </where>
     </select>
     <update id="update" parameterType="com.lbx.tradefix.vo.FixDataVo">

@@ -11,4 +11,5 @@ public class OrgInfo {
     private Long id;
     private String orgName;
     private String orgCode;
+    private Long parentOrgId;
 }
