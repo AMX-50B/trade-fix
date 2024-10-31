@@ -15,7 +15,7 @@ import oracle.jdbc.driver.Message;
 public class BizException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    private String code;
+    private Integer code;
     private String msg;
     private String[] detail;
 
@@ -33,7 +33,7 @@ public class BizException extends RuntimeException {
         return this;
     }
 
-    public BizException code(String code) {
+    public BizException code(Integer code) {
         this.code = code;
         return this;
     }

@@ -4,7 +4,7 @@ import com.baomidou.dynamic.datasource.annotation.DS;
 import com.lbx.tradefix.dao.TradeTiDBDao;
 import com.lbx.tradefix.vo.OrderOutBoundVo;
 import com.lbx.tradefix.vo.query.OrderBoundQuery;
-import com.lbx.tradefix.vo.query.SAPInfoQuery;
+import com.lbx.tradefix.vo.query.OrderQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,23 +15,21 @@ import java.util.List;
  * @date 2024/10/25
  **/
 @Service
-public class OrderOutBoundService {
+public class OrderInfoService {
     @Autowired
     private TradeTiDBDao tiDBDao;
 
     @DS("tidb")
-    public List<OrderOutBoundVo> getOutbound(OrderBoundQuery query){
-        return tiDBDao.selectOrderOutBound(query);
+    public List<OrderOutBoundVo> getOrderData(OrderQuery query){
+        return tiDBDao.selectOrderData(query);
     }
-
     @DS("tidb")
-    public OrderOutBoundVo getOutboundMain(OrderBoundQuery query){
-        return tiDBDao.getOutboundMain(query);
+    public List<OrderOutBoundVo> getGiftData(OrderQuery query){
+        return tiDBDao.selectGiftData(query);
     }
-
     @DS("tidb")
-    public List<OrderOutBoundVo> getOutboundDetail(Long outboundId,Long wareInsideCode){
-        return tiDBDao.getOutboundDetail( outboundId, wareInsideCode);
+    public List<OrderOutBoundVo> getPromotionData(OrderQuery query){
+        return tiDBDao.selectPromotionData(query);
     }
 
 }

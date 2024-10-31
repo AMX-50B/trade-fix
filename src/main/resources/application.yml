@@ -23,9 +23,12 @@ spring:
           password: ydsj1f4uwH
         tidb:
           url: jdbc:mysql://10.245.1.222:33061/h3_trade?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
-          username: d66ec2a3-5283-43c0-b7e8-2a018b9a9ebe
-          password: Fqm5yK4ahBBBBHXb
+          username: 855e1db4-c4ba-4521-b533-9416f1307195
+          password: 6YI2u0gEm4zEbE3Q
           driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      initial-size: 50
+      max-active: 100
 mybatis-plus:
   mapper-locations: classpath:/mapper/*Mapper.xml
   configuration:

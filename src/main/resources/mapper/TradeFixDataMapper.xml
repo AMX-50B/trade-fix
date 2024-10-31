@@ -35,6 +35,7 @@
             <if test="line!=null">
                 and line = #{line}
             </if>
+            order by line
         </where>
     </select>
     <update id="update" parameterType="com.lbx.tradefix.vo.FixDataVo">
@@ -42,4 +43,19 @@
         where line = #{line}
     </update>
 
+    <insert id="insertSapData">
+        insert into sap_data(line, billdate, pkid, deptid, goodsid, pbseqid, posbillno, total, billtypeid, fgtyp,dateupload)
+            values
+                <foreach collection="list" separator="," item="item">
+                    (#{item.line},#{item.billdate},#{item.pkid},#{item.deptid},
+                    #{item.goodsid},#{item.pbseqid},#{item.posbillno},#{item.total},#{item.billtypeid},#{item.fgtyp},#{item.dateupload})
+                </foreach>
+    </insert>
+
+    <insert id="insertReport">
+        insert into report(line, bill_no, sap_num, erp_num, msg) values
+            <foreach collection="list" separator="," item="item">
+                (#{item.line},#{tiem.billNo},#{item.sapNum},#{item.erpNum},#{item.msg})
+            </foreach>
+    </insert>
 </mapper>

@@ -28,7 +28,7 @@ public class TradeFixApplicationTests {
     public void contextLoads() {
         FixDataQuery vo = new FixDataQuery();
         vo.setBilldate("2024-07-30");
-        vo.setErpNum(0);
+        vo.setErpNum(0d);
         vo.setStatus(0);
 //        vo.setDeptid("1004");
 //        vo.setUdfcode(1160901085L);

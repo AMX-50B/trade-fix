@@ -10,11 +10,16 @@ import java.util.Date;
  **/
 @Data
 public class SAPInfo {
+    private Long id;
     private String pkid;
     private String deptid;
     private String goodsid;
     private Date billdate;
+    private Date dateupload;
     private String pbseqid;
     private String posbillno;
     private Double total;
+    private Integer fgtyp;
+    private Integer billtypeid;
+    private Long line;
 }

@@ -3,7 +3,7 @@
 <mapper namespace="com.lbx.tradefix.dao.SapDao">
 
     <select id="selectSapInfo" parameterType="com.lbx.tradefix.vo.query.SAPInfoQuery" resultType="com.lbx.tradefix.vo.SAPInfo">
-        SELECT i.pbseqid,i.goodsid,i.pkid,h.billdate,posbillno,total
+        SELECT h.pbseqid,i.goodsid,i.pkid,h.billdate,h.posbillno,i.total,i.fgtyp,h.billtypeid,h.dateupload
         FROM T_SAP_POS_DETAIL_H h LEFT JOIN T_SAP_POS_DETAIL_I i ON h.PKID = i.PKID
         WHERE  h.DEPTID = #{deptid}
         AND i.GOODSID = #{goodsid}

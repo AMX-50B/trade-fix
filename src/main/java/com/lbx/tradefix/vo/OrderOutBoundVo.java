@@ -10,7 +10,7 @@ import java.util.Date;
  **/
 @Data
 public class OrderOutBoundVo {
-    String id;
+    Long id;
     private Long groupId;
     private Long companyId;
     private Long businessId;
@@ -19,4 +19,7 @@ public class OrderOutBoundVo {
     private String outboundCode;
     private Integer billType;
     private Date modifyTime;
+    private Date createTime;
+    private Long wareInsideCode;
+    private Double wareQty;
 }

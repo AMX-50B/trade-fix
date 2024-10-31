@@ -1,30 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lbx.tradefix.dao.TradeTiDBDao">
+    <select id="getOutboundMain" parameterType="com.lbx.tradefix.vo.query.OrderBoundQuery"
+            resultType="com.lbx.tradefix.vo.OrderOutBoundVo">
+        select t.id,t.group_id,t.company_id,t.business_id,t.order_code,t.outbound_code,
+               t.order_id,t.bill_type,t.modify_time,t.create_time
+        from h3_trade.t_order_outbound t
+        where
+        t.group_id = 10000
+        and t.company_id = #{companyId}
+        and t.business_id = #{businessId}
+        <if test="orderId!=null">
+            and t.order_id = #{orderId}
+        </if>
+        <if test="id!=null">
+            and t.id =#{id}
+        </if>`
+    </select>
+
+    <select id="selectPromotionData" resultType="com.lbx.tradefix.vo.OrderOutBoundVo" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
+        select d.bill_no as id,d.group_id,d.company_id,d.business_id,d.give_date as create_time,t.ware_inside_code,t.give_num as wareQty
+        from h3_trade.t_promotion_gift_stock t left join h3_trade.t_promotion_gift_stock_detail d
+                                                         on t.group_id = d.group_id and t.id = d.promotion_gift_stock_id
+        where d.group_id = 10000 and t.group_id = 10000
+          and t.business_id = #{businessId}  and t.company_id = #{companyId}
+          <if test="id!=null">
+              and d.bill_no=#{id}
+          </if>
+          <if test="wareInsideCode!=null">
+              d.ware_inside_code = #{wareInsideCode}
+          </if>
+    </select>
+
+    <select id="selectOrderData" resultType="com.lbx.tradefix.vo.OrderOutBoundVo" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
+        select d.order_id as id,d.group_id,d.company_id,d.business_id,d.trade_finish_time as create_time,t.ware_inside_code,t.ware_qty as wareQty
+        from h3_trade.t_other_gifts_stock t left join h3_trade.t_other_gifts_stock_detail d
+        on t.group_id = d.group_id and t.order_id = d.order_id
+        where d.group_id = 10000 and t.group_id = 10000
+        and t.business_id = #{businessId}  and t.company_id = #{companyId}
+        <if test="id!=null">
+            and d.order_id=#{id} and t.order_id = #{id}
+        </if>
+        <if test="wareInsideCode!=null">
+            d.ware_inside_code = #{wareInsideCode}
+        </if>
+    </select>
+
+    <select id="selectGiftData" resultType="com.lbx.tradefix.vo.OrderOutBoundVo" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
+        select d.bill_no as id,d.group_id,d.company_id,d.business_id,d.give_date as create_time,t.ware_inside_code,t.give_num as wareQty
+        from h3_trade.t_other_gifts_stock t left join h3_trade.t_other_gifts_stock_detail d
+        on t.group_id = d.group_id and t.id = d.other_gifts_stock_id
+        where d.group_id = 10000 and t.group_id = 10000
+        and t.business_id = #{businessId}  and t.company_id = #{companyId}
+        <if test="id!=null">
+            and d.bill_no=#{id}
+        </if>
+        <if test="wareInsideCode!=null">
+            d.ware_inside_code = #{wareInsideCode}
+        </if>
+    </select>
+
+    <select id="getOutboundDetail"
+            resultType="com.lbx.tradefix.vo.OrderOutBoundVo" >
+        select d.id,d.ware_inside_code,d.ware_qty
+        from h3_trade.t_order_outbound_detail d
+        where
+        d.group_id = 10000
+        and d.outbound_id = #{outboundId} and d.ware_inside_code = #{wareInsideCode}
+    </select>
     <select id="selectOrderOutBound" parameterType="com.lbx.tradefix.vo.query.OrderBoundQuery"
             resultType="com.lbx.tradefix.vo.OrderOutBoundVo">
-        select id,group_id,company_id,business_id,order_code,outbound_code,order_id,bill_type,modify_time
-        from h3_trade.t_order_outbound
-        where group_id = 10000
-        <if test="companyId!=null">
-            and company_id = #{companyId}
-        </if>
-        <if test="businessId!=null">
-            and business_id = #{businessId}
-        </if>
+        select t.id,t.group_id,t.company_id,t.business_id,t.order_code,t.outbound_code,
+        t.order_id,t.bill_type,t.modify_time,d.ware_inside_code,d.ware_qty as ware_qty
+        from h3_trade.t_order_outbound t left join h3_trade.t_order_outbound_detail d
+        on t.id = d.outbound_id and t.group_id and d.group_id
+        where t.group_id = 10000 and d.group_id = 10000
+        and t.company_id = #{companyId} and d.company_id = #{companyId}
+        and t.business_id = #{businessId} and d.business_id = #{businessId}
+
         <if test="orderCodes!=null">
-            and order_code in
+            and t.order_code in
             <foreach collection="orderCodes" open="(" item="item" close=")" separator=",">
                 #{item}
             </foreach>
         </if>
         <if test="outboundCodes!=null">
-            and id in
+            and t.id in
             <foreach collection="outboundCodes" open="(" item="item" close=")" separator=",">
                 #{item}
             </foreach>
         </if>
-
     </select>
 
     <select id="selectOrderSapMq" parameterType="com.lbx.tradefix.vo.query.OrderSapMqQuery"
@@ -43,4 +108,6 @@
         </if>
 
     </select>
+
+
 </mapper>

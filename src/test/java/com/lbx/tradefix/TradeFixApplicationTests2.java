@@ -45,10 +45,9 @@ public class TradeFixApplicationTests2 {
     SapService sapService;
     @Resource
     OrderOutBoundService boundService;
-    @Resource
-    OrderSapMqService mqService;
     @Autowired
     private OrderSapMqService orderSapMqService;
+
 
     @Test
     public void contextLoads() throws ParseException {
@@ -78,9 +77,6 @@ public class TradeFixApplicationTests2 {
                 List<SAPInfo> info = sapService.getSAPInfo(query);
                 if(CollectionUtils.isEmpty(info)){
                     throw BizException.builder().msg("在SAP查不到:{}").detail(JSONObject.toJSONString(query)).build();
-                }
-                if(info.size()!=Math.abs(fix.getSapNum())){
-                    throw BizException.builder().msg("在SAP查到:{}条，报告：{}条").detail(info.size()+"",fix.getSapNum().toString()).build();
                 }
                 List<OrderOutBoundVo> h = handle(info, business);
                 fix.setStatus(1);
@@ -140,11 +136,13 @@ public class TradeFixApplicationTests2 {
     private Map<String, OrderOutBoundVo> getOutboundById(OrgInfo info,List<String> codes) {
         OrderBoundQuery boundQuery = new OrderBoundQuery();
         boundQuery.setOutboundCodes(codes);
+        boundQuery.setBusinessId(info.getId());
+        boundQuery.setCompanyId(info.getParentOrgId());
         List<OrderOutBoundVo> outbound = boundService.getOutbound(boundQuery);
         if(CollectionUtils.isEmpty(outbound)){
            return new HashMap<>(0);
         }
-        return outbound.stream().collect(Collectors.toMap(OrderOutBoundVo::getId, Function.identity()));
+        return outbound.stream().collect(Collectors.toMap(v->v.getId().toString(), Function.identity()));
     }
 
     private Map<String, OrderOutBoundVo> getOutboundByOrderCode(OrgInfo info,List<String> codes) {
