@@ -145,14 +145,14 @@ public class TradeFixApplicationTests3 {
         Double ot = 0d;
         Double st = info.getTotal();
 
-        if("43".equals(info.getPbseqid())){
+        if(43==info.getBilltypeid()){
             st = -st;
         }
         report.setSapNum(st);
         OrderQuery query = new OrderQuery();
         query.setCompanyId(business.getParentOrgId());
         query.setBusinessId(business.getId());
-        query.setId(info.getId());
+        query.setId(info.getPbseqid());
         query.setWareInsideCode(new Long(goodsid));
         List<OrderOutBoundVo> data = getData(query, info.getFgtyp());
         if(CollectionUtils.isEmpty(data)){
@@ -184,7 +184,7 @@ public class TradeFixApplicationTests3 {
             return  orderInfoService.getOrderData(query);
         }else {
             List<OrderOutBoundVo> giftData = orderInfoService.getGiftData(query);
-            if(CollectionUtils.isEmpty(giftData)||1== ftype){
+            if(CollectionUtils.isEmpty(giftData)&&1== ftype){
                 return orderInfoService.getPromotionData(query);
             }
             return giftData;
