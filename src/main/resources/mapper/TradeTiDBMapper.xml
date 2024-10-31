@@ -34,7 +34,7 @@
 
     <select id="selectOrderData" resultType="com.lbx.tradefix.vo.OrderOutBoundVo" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
         select d.order_id as id,d.group_id,d.company_id,d.business_id,d.trade_finish_time as create_time,t.ware_inside_code,t.ware_qty as wareQty
-        from h3_trade.t_order_info t left join h3_trade.t_order_detail d
+        from h3_trade.t_order_info d left join h3_trade.t_order_detail t
         on t.group_id = d.group_id and t.order_id = d.order_id
         where d.group_id = 10000 and t.group_id = 10000
         and t.business_id = #{businessId} and d.business_id=#{businessId}
