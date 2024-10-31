@@ -142,6 +142,9 @@ public class TradeFixApplicationTests3 {
     private ReportVo handle(SAPInfo info,OrgInfo business,String goodsid){
         ReportVo report = new ReportVo();
         report.setBillNo(info.getPbseqid());
+        report.setBusinessId(business.getId());
+        report.setCompanyId(business.getParentOrgId());
+        report.setWareInsideCode(Long.getLong(goodsid));
         Double ot = 0d;
         Double st = info.getTotal();
 
@@ -154,7 +157,9 @@ public class TradeFixApplicationTests3 {
         query.setBusinessId(business.getId());
         query.setId(info.getPbseqid());
         query.setWareInsideCode(new Long(goodsid));
+
         List<OrderOutBoundVo> data = getData(query, info.getFgtyp());
+        report.setType(query.getType());
         if(CollectionUtils.isEmpty(data)){
             report.setErpNum(ot);
             report.setStatus(-11);
@@ -181,10 +186,13 @@ public class TradeFixApplicationTests3 {
 
     private List<OrderOutBoundVo> getData(OrderQuery query,Integer ftype){
         if(ftype==null){
+            query.setType(0);
             return  orderInfoService.getOrderData(query);
         }else {
             List<OrderOutBoundVo> giftData = orderInfoService.getGiftData(query);
+            query.setType(1);
             if(CollectionUtils.isEmpty(giftData)&&1== ftype){
+                query.setType(2);
                 return orderInfoService.getPromotionData(query);
             }
             return giftData;

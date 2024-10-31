@@ -35,5 +35,5 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
 logging:
   level:
-    com.lbx.tradefix.dao: debug
+    com.lbx.tradefix.dao: info
 

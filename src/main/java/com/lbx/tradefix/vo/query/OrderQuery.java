@@ -13,4 +13,5 @@ public class OrderQuery {
     private Long companyId;
     private Long businessId;
     private Long wareInsideCode;
+    private Integer type;
 }
