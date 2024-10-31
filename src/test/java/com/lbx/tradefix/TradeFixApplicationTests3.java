@@ -90,7 +90,7 @@ public class TradeFixApplicationTests3 {
                 }
                 FixDataVo  fixDataVo = jugeReport(h);
                 fixDataVo.setLine(fix.getLine());
-                tradeFixService.update(fix);
+                tradeFixService.update(fixDataVo);
                 log.info("line:{} -> 比对完成：{}",fix.getLine(),JSONObject.toJSONString(fixDataVo));
             } catch (BizException e) {
                 FixDataVo  fixDataVo = new FixDataVo();
@@ -117,7 +117,7 @@ public class TradeFixApplicationTests3 {
         });
         Map<Integer, List<ReportVo>> map = h.stream().collect(Collectors.groupingBy(ReportVo::getStatus));
         if(map.size()==1){
-            Integer status = map.get(0).get(0).getStatus();
+            Integer status = map.values().iterator().next().get(0).getStatus();
             switch (status){
                 case 2:
                     fixDataVo.setRemark("上传时间差异");
@@ -141,7 +141,7 @@ public class TradeFixApplicationTests3 {
 
     private ReportVo handle(SAPInfo info,OrgInfo business,String goodsid){
         ReportVo report = new ReportVo();
-        report.setBillNo(info.getId());
+        report.setBillNo(info.getPbseqid());
         Double ot = 0d;
         Double st = info.getTotal();
 
@@ -172,7 +172,7 @@ public class TradeFixApplicationTests3 {
         }else if(!DateUtil.isSameDate(info.getDateupload(), data.get(0).getCreateTime())){
             report.setErpNum(ot);
             report.setStatus(2);
-            report.setMsg("上传时间差异");
+            report.setMsg("上传时间差异:"+DateUtil.formatDate(info.getDateupload())+","+DateUtil.formatDate(data.get(0).getCreateTime()));
             return report;
         }else {
             return null;
