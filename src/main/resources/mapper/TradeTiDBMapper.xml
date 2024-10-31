@@ -20,7 +20,7 @@
 
     <select id="selectPromotionData" resultType="com.lbx.tradefix.vo.OrderOutBoundVo" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
         select d.bill_no as id,d.group_id,d.company_id,d.business_id,d.give_date as create_time,t.ware_inside_code,t.give_num as wareQty
-        from h3_trade.t_promotion_gift_stock t left join h3_trade.t_promotion_gift_stock_detail d
+        from h3_trade.t_promotion_gift_stock d left join h3_trade.t_promotion_gift_stock_detail t
                                                          on t.group_id = d.group_id and t.id = d.promotion_gift_stock_id
         where d.group_id = 10000 and t.group_id = 10000
           and t.business_id = #{businessId}  and t.company_id = #{companyId}
@@ -49,7 +49,7 @@
 
     <select id="selectGiftData" resultType="com.lbx.tradefix.vo.OrderOutBoundVo" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
         select d.bill_no as id,d.group_id,d.company_id,d.business_id,d.give_date as create_time,t.ware_inside_code,t.give_num as wareQty
-        from h3_trade.t_other_gifts_stock t left join h3_trade.t_other_gifts_stock_detail d
+        from h3_trade.t_other_gifts_stock d left join h3_trade.t_other_gifts_stock_detail t
         on t.group_id = d.group_id and t.id = d.other_gifts_stock_id
         where d.group_id = 10000 and t.group_id = 10000
         and t.business_id = #{businessId}  and t.company_id = #{companyId}
