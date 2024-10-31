@@ -69,7 +69,7 @@ public class TradeFixApplicationTests3 {
                 String goodsid = wareMap.get(fix.getUdfcode());
                 OrgInfo business = orgMap.get(fix.getDeptid());
                 if(StringUtils.isEmpty(goodsid)||business==null){
-                    throw BizException.builder().msg("商品编码:{}或组织:{}查不到").detail(fix.getUdfcode(),fix.getDeptid()).build();
+                    throw BizException.builder().code(-1).msg("商品编码:{}或组织:{}查不到").detail(fix.getUdfcode(),fix.getDeptid()).build();
                 }
                 SAPInfoQuery query = new SAPInfoQuery();
                 query.setGoodsid(goodsid);
@@ -78,7 +78,7 @@ public class TradeFixApplicationTests3 {
                 query.setDateUploadEnd(DateUtil.getEndTime(fix.getBilldate()));
                 List<SAPInfo> infos = sapService.getSAPInfo(query);
                 if(CollectionUtils.isEmpty(infos)){
-                    throw BizException.builder().code(-1).msg("在SAP查不到:{}").detail(JSONObject.toJSONString(query)).build();
+                    throw BizException.builder().code(-2).msg("在SAP查不到:{}").detail(JSONObject.toJSONString(query)).build();
                 }
                 List<ReportVo> h = new ArrayList<>(infos.size());
                 for(SAPInfo info:infos){
@@ -101,6 +101,7 @@ public class TradeFixApplicationTests3 {
                 log.error("line:{} -> 处理失败：{}",fix.getLine(),e.getMsg());
             } catch (Exception e){
                 log.error("line:{} -> 处理失败：{}",fix.getLine(),e.getMessage());
+                throw e;
             }
         }
     }
@@ -122,12 +123,9 @@ public class TradeFixApplicationTests3 {
                     fixDataVo.setRemark("上传时间差异");
                     break;
                 case -11:
-                    fixDataVo.setRemark("erp主表查不到数据");
+                    fixDataVo.setRemark("erp查不到数据");
                     break;
                 case -22:
-                    fixDataVo.setRemark("ERP明细表查不到数据");
-                    break;
-                case -33:
                     fixDataVo.setRemark("数据差异");
                     break;
             }
@@ -159,7 +157,7 @@ public class TradeFixApplicationTests3 {
         List<OrderOutBoundVo> data = getData(query, info.getFgtyp());
         if(CollectionUtils.isEmpty(data)){
             report.setErpNum(ot);
-            report.setStatus(-22);
+            report.setStatus(-11);
             report.setMsg("订单查不到数据");
             return report;
         }
@@ -168,7 +166,7 @@ public class TradeFixApplicationTests3 {
         }
         if(!Objects.equals(st, ot)){
             report.setErpNum(ot);
-            report.setStatus(-33);
+            report.setStatus(-22);
             report.setMsg("数据差异");
             return report;
         }else if(!DateUtil.isSameDate(info.getDateupload(), data.get(0).getCreateTime())){

@@ -28,7 +28,7 @@
               and d.bill_no=#{id}
           </if>
           <if test="wareInsideCode!=null">
-              d.ware_inside_code = #{wareInsideCode}
+              and d.ware_inside_code = #{wareInsideCode}
           </if>
     </select>
 
@@ -43,7 +43,7 @@
             and d.order_id=#{id} and t.order_id = #{id}
         </if>
         <if test="wareInsideCode!=null">
-            d.ware_inside_code = #{wareInsideCode}
+            and d.ware_inside_code = #{wareInsideCode}
         </if>
     </select>
 
@@ -57,7 +57,7 @@
             and d.bill_no=#{id}
         </if>
         <if test="wareInsideCode!=null">
-            d.ware_inside_code = #{wareInsideCode}
+            and d.ware_inside_code = #{wareInsideCode}
         </if>
     </select>
 
