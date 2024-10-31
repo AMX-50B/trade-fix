@@ -145,7 +145,7 @@ public class TradeFixApplicationTests3 {
         Double ot = 0d;
         Double st = info.getTotal();
 
-        if(43==info.getBilltypeid()){
+        if(info.getBilltypeid()!=null&&43==info.getBilltypeid()){
             st = -st;
         }
         report.setSapNum(st);

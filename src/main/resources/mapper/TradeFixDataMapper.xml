@@ -53,9 +53,9 @@
     </insert>
 
     <insert id="insertReport">
-        insert into report(line, bill_no, sap_num, erp_num, msg) values
+        insert into report(line, bill_no, sap_num, erp_num, report.status,msg) values
             <foreach collection="list" separator="," item="item">
-                (#{item.line},#{tiem.billNo},#{item.sapNum},#{item.erpNum},#{item.msg})
+                (#{item.line},#{item.billNo},#{item.sapNum},#{item.erpNum},#{item.status},#{item.msg})
             </foreach>
     </insert>
 </mapper>

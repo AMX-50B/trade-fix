@@ -102,7 +102,7 @@ public class TradeFixApplicationTests2 {
 
         List<SAPInfo> gif = map.get(true);
         if(!CollectionUtils.isEmpty(gif)){
-            List<String> outboundCodes = gif.stream().map(SAPInfo::getPbseqid).distinct().collect(Collectors.toList());
+            List<Long> outboundCodes = gif.stream().map(SAPInfo::getPbseqid).distinct().collect(Collectors.toList());
             Map<String, OrderOutBoundVo> gifMap = getOutboundById(business, outboundCodes);
             check(gif,gifMap,miss,time);
         }
@@ -120,10 +120,10 @@ public class TradeFixApplicationTests2 {
 
     private void check(List<SAPInfo> info,Map<String, OrderOutBoundVo> boundVoMap,List<String> miss,List<OrderOutBoundVo> time){
         for(SAPInfo sapInfo : info){
-            String pbseqid = sapInfo.getPbseqid();
+            Long pbseqid = sapInfo.getPbseqid();
             OrderOutBoundVo boundVo = boundVoMap.get(pbseqid);
             if(boundVo==null){
-                miss.add(pbseqid);
+                miss.add(pbseqid.toString());
                 continue;
             }
             boolean flag = DateUtil.isSameDate(sapInfo.getBilldate(), boundVo.getModifyTime());
@@ -133,9 +133,8 @@ public class TradeFixApplicationTests2 {
         }
     }
 
-    private Map<String, OrderOutBoundVo> getOutboundById(OrgInfo info,List<String> codes) {
+    private Map<String, OrderOutBoundVo> getOutboundById(OrgInfo info,List<Long> codes) {
         OrderBoundQuery boundQuery = new OrderBoundQuery();
-        boundQuery.setOutboundCodes(codes);
         boundQuery.setBusinessId(info.getId());
         boundQuery.setCompanyId(info.getParentOrgId());
         List<OrderOutBoundVo> outbound = boundService.getOutbound(boundQuery);
