@@ -33,7 +33,7 @@
     </select>
 
     <select id="selectOrderData" resultType="com.lbx.tradefix.vo.OrderOutBoundVo" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
-        select d.order_id as id,d.group_id,d.company_id,d.business_id,d.trade_finish_time as create_time,t.ware_inside_code,t.ware_qty as wareQty
+        select d.order_id as id,d.group_id,d.company_id,d.business_id,d.settle_time as create_time,t.ware_inside_code,t.ware_qty as wareQty
         from h3_trade.t_order_info d left join h3_trade.t_order_detail t
         on t.group_id = d.group_id and t.order_id = d.order_id
         where d.group_id = 10000 and t.group_id = 10000
@@ -109,6 +109,12 @@
         </if>
 
     </select>
-
-
+    
+    <select id="selectStockPurchaseSaleLog" parameterType="com.lbx.tradefix.vo.query.OrderQuery"
+    resultType="com.lbx.tradefix.vo.OrderOutBoundVo">
+        select business_id,company_id,bill_number as orderCode,ware_inside_code,change_stock_qty as wareQty
+        from h3_stock.t_stock_purchase_sale_log
+        where group_id =10000
+          and company_id =#{companyId} and business_id =#{businessId} and bill_number = #{id};
+    </select>
 </mapper>

@@ -24,11 +24,15 @@
                 and erp_num  = #{erpNum}
             </if>
             <if test="diffNum!=null">
-                and diffNum  = #{diffNum}
+                and diff_num  = #{diffNum}
             </if>
-            <if test="ltDiffNum!=null">
-                and diffNum  &lt;  #{ltDiffNum}
-            </if>
+<!--            <if test="ltDiffNum!=null and ltDiffnum = 0">-->
+<!--                and diff_num  >  0-->
+<!--            </if>-->
+
+<!--            <if test="ltDiffNum!=null and ltDiffnum = 1">-->
+<!--                and diff_num  &lt;  0-->
+<!--            </if>-->
             <if test="status!=null">
                 and status  = #{status}
             </if>
@@ -53,9 +57,28 @@
     </insert>
 
     <insert id="insertReport">
-        insert into report(line, bill_no, sap_num, erp_num,status,msg,business_id,company_id,type,ware_inside_code) values
+        insert into report(line, bill_no, sap_num, erp_num,status,msg,business_id,company_id,type,ware_inside_code,price) values
             <foreach collection="list" separator="," item="item">
-                (#{item.line},#{item.billNo},#{item.sapNum},#{item.erpNum},#{item.status},#{item.msg},#{item.businessId},#{item.companyId},#{item.type},#{item.wareInsideCode})
+                (#{item.line},#{item.billNo},#{item.sapNum},#{item.erpNum},#{item.status},#{item.msg},#{item.businessId},#{item.companyId},#{item.type},#{item.wareInsideCode},#{item.price})
             </foreach>
     </insert>
+
+    <select id="selectReport" resultType="com.lbx.tradefix.vo.ReportVo" parameterType="com.lbx.tradefix.vo.ReportVo">
+        select * from report
+        where 1=1
+            <if test="status!=null">
+                and status = #{status}
+            </if>
+    </select>
+
+    <update id="updateReport" parameterType="com.lbx.tradefix.vo.ReportVo">
+        update report set
+            <if test="status!=null">
+                status = #{status}
+            </if>
+            <if test="price!=null">
+                ,price = #{price}
+            </if>
+        where line = #{line}
+    </update>
 </mapper>

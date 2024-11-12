@@ -28,4 +28,6 @@ public interface TradeTiDBDao {
     List<OrderOutBoundVo> selectGiftData(OrderQuery query);
 
     List<OrderOutBoundVo> selectPromotionData(OrderQuery query);
+
+    List<OrderOutBoundVo>  selectStockPurchaseSaleLog(OrderQuery orderQuery);
 }

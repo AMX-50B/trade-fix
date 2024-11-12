@@ -22,4 +22,8 @@ public interface TradeFixDao {
     int insertSapData(@Param("list") List<SAPInfo> info);
 
     int insertReport(@Param("list") List<ReportVo> h);
+
+    List<ReportVo> selectReport(ReportVo vo);
+
+    int updateReport(ReportVo vo);
 }

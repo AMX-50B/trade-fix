@@ -32,4 +32,8 @@ public class OrderInfoService {
         return tiDBDao.selectPromotionData(query);
     }
 
+    @DS("tidb")
+    public List<OrderOutBoundVo> getStockSaleInfo(OrderQuery orderQuery) {
+        return tiDBDao.selectStockPurchaseSaleLog(orderQuery);
+    }
 }

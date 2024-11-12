@@ -56,4 +56,21 @@ public class BaseMessageService {
         }
         return wareMap;
     }
+
+    @DS("tidb")
+    public Map<Long,WareInfoVo> getWareMessageByInsideCode(Set<Long> wareCodes) {
+        WareInfoQuery query = new WareInfoQuery();
+        query.setWareInsideCodes(new ArrayList<>(wareCodes));
+        List<WareInfoVo> infoVos = baseMessageDao.selectWareInfo(query);
+        Map<Long,WareInfoVo> wareMap ;
+        if(!CollectionUtils.isEmpty(infoVos)){
+            wareMap =  new HashMap<>(infoVos.size());
+            for(WareInfoVo wareInfoVo : infoVos){
+                wareMap.put(wareInfoVo.getWareInsideCode(),wareInfoVo);
+            }
+        }else {
+            wareMap =  new HashMap<>(0);
+        }
+        return wareMap;
+    }
 }

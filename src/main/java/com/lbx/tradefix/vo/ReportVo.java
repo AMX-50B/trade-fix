@@ -19,4 +19,5 @@ public class ReportVo {
     private String msg;
     private Integer type;
     private Long wareInsideCode;
+    private Double price;
 }

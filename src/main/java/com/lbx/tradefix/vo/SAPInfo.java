@@ -22,4 +22,5 @@ public class SAPInfo {
     private Integer fgtyp;
     private Integer billtypeid;
     private Long line;
+    private Double price;
 }

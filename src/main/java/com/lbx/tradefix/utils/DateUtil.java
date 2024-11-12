@@ -59,4 +59,9 @@ public class DateUtil {
         cal.set(Calendar.MILLISECOND, 999);
         return sdf2.format(cal.getTime());
     }
+
+    public static Date parseDate(String date) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat(YYYY_MM_DD);
+        return sdf.parse(date);
+    }
 }

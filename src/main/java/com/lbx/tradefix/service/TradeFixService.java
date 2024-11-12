@@ -34,8 +34,20 @@ public class TradeFixService {
     public int insertSapData(List<SAPInfo> info) {
         return tradeFixDao.insertSapData(info);
     }
+
     @DS("fix")
     public int insertReport(List<ReportVo> h) {
         return tradeFixDao.insertReport(h);
+    }
+
+    @DS("fix")
+    public List<ReportVo> getReport(ReportVo vo) {
+        return tradeFixDao.selectReport(vo);
+    }
+
+    @DS("fix")
+    public int updateReport(ReportVo vo) {
+        return tradeFixDao.updateReport(vo);
+
     }
 }

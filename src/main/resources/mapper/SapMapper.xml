@@ -3,12 +3,13 @@
 <mapper namespace="com.lbx.tradefix.dao.SapDao">
 
     <select id="selectSapInfo" parameterType="com.lbx.tradefix.vo.query.SAPInfoQuery" resultType="com.lbx.tradefix.vo.SAPInfo">
-        SELECT h.pbseqid,i.goodsid,i.pkid,h.billdate,h.posbillno,i.total,i.fgtyp,h.billtypeid,h.dateupload
+        SELECT h.pbseqid,i.goodsid,sum(i.total) as total,i.fgtyp,h.billtypeid,i.price
         FROM T_SAP_POS_DETAIL_H h LEFT JOIN T_SAP_POS_DETAIL_I i ON h.PKID = i.PKID
         WHERE  h.DEPTID = #{deptid}
         AND i.GOODSID = #{goodsid}
         AND h.DATEUPLOAD >= TO_DATE(#{dateUploadStart},'YYYY-MM-DD HH24:mi:ss')
         AND h.DATEUPLOAD &lt;= TO_DATE(#{dateUploadEnd},'YYYY-MM-DD HH24:mi:ss')
+        group by h.pbseqid,h.billtypeid,i.goodsid,i.fgtyp,i.price
     </select>
 
 </mapper>
