@@ -51,9 +51,11 @@ public class TradeFixApplicationTests3 {
     private Executor executor;
     @Autowired
     private OrderInfoService orderInfoService;
+    private static Map<Long,Long> goodsMap = new HashMap<>();
 
     @Test
     public void contextLoads() throws ParseException {
+        goodsMap.put(1153010L,1105905L);
         FixDataQuery vo = new FixDataQuery();
 //        vo.setBilldate("2024-07-30");
 //        vo.setLine(84626L);
@@ -125,19 +127,28 @@ public class TradeFixApplicationTests3 {
             fixDataVo.setRemark(next.get(0).getMsg());
             return fixDataVo;
         }else {
-            fixDataVo.setStatus(-44);
-            fixDataVo.setRemark("综合情况！");
-            return fixDataVo;
+            map.remove(1);
+            if(map.size()==1){
+                List<ReportVo> next = map.values().iterator().next();
+                fixDataVo.setStatus(next.get(0).getStatus());
+                fixDataVo.setRemark(next.get(0).getMsg());
+                return fixDataVo;
+            }else {
+                fixDataVo.setStatus(-44);
+                fixDataVo.setRemark("综合情况！");
+                return fixDataVo;
+            }
         }
 
     }
 
     private ReportVo handle(SAPInfo info, OrgInfo business, String goodsid, Date date){
+        Long goodsId = new Long(goodsid);
         ReportVo report = new ReportVo();
         report.setBillNo(info.getPbseqid());
         report.setBusinessId(business.getId());
         report.setCompanyId(business.getParentOrgId());
-        report.setWareInsideCode(new Long(goodsid));
+        report.setWareInsideCode(goodsId);
         report.setPrice(info.getPrice());
         Double ot = 0d;
         Double st = info.getTotal();
@@ -146,50 +157,130 @@ public class TradeFixApplicationTests3 {
             st = -st;
         }
         report.setSapNum(st);
-        OrderQuery query = new OrderQuery();
-        query.setCompanyId(business.getParentOrgId());
-        query.setBusinessId(business.getId());
-        query.setId(info.getPbseqid());
-        query.setWareInsideCode(new Long(goodsid));
 
-        List<OrderOutBoundVo> data = getData(query, info.getFgtyp());
-        report.setType(query.getType());
-        if(CollectionUtils.isEmpty(data)){
-            List<OrderOutBoundVo> stockSaleInfo = orderInfoService.getStockSaleInfo(query);
-            if(CollectionUtils.isEmpty(stockSaleInfo)){
+        OrderQuery query1 = new OrderQuery();
+        query1.setCompanyId(business.getParentOrgId());
+        query1.setBusinessId(business.getId());
+        query1.setId(info.getPbseqid());
+
+        List<OrderOutBoundVo> data = getData(query1, info.getFgtyp());
+        report.setType(query1.getType());
+        if(!CollectionUtils.isEmpty(data)){
+            Map<Long, List<OrderOutBoundVo>> map = data.stream().collect(Collectors.groupingBy(OrderOutBoundVo::getWareInsideCode));
+            if(map.size()==1){
+                if(!data.get(0).getWareInsideCode().equals(goodsId)){
+                    ot = data.get(0).getWareQty();
+                    report.setErpNum(ot);
+                    report.setStatus(-55);
+                    report.setWareInsideCode1(data.get(0).getWareInsideCode().toString());
+                    report.setMsg("商品编码对不上："+data.get(0).getWareInsideCode());
+                    return report;
+                }
+            }else {
+                List<OrderOutBoundVo> orderOutBoundVos = map.get(goodsId);
+                if(CollectionUtils.isEmpty(orderOutBoundVos)){
+                    Long newGoodsId = goodsMap.get(goodsId);
+                    if(newGoodsId!=null){
+                        List<OrderOutBoundVo> newVo = map.get(newGoodsId);
+                        if(!CollectionUtils.isEmpty(newVo)){
+                            for(OrderOutBoundVo outbound:newVo){
+                                ot+=outbound.getWareQty();
+                            }
+                            report.setErpNum(ot);
+                            report.setStatus(-55);
+                            report.setWareInsideCode1(newVo.get(0).getWareInsideCode().toString());
+                            report.setMsg("商品编码对不上");
+                        }
+                    }
+                    List<Long> collect = data.stream().map(OrderOutBoundVo::getId).collect(Collectors.toList());
+                    report.setErpNum(ot);
+                    report.setStatus(-66);
+                    report.setMsg("疑是商品编码对不上："+JSONObject.toJSONString(collect));
+                    return report;
+                }else {
+                    data = orderOutBoundVos;
+                }
+            }
+            for(OrderOutBoundVo outbound:data){
+                ot+=outbound.getWareQty();
+            }
+            if(!Objects.equals(st, ot)){
+                report.setErpNum(ot);
+                report.setStatus(-33);
+                report.setMsg("数据差异");
+                return report;
+            }else if(!DateUtil.isSameDate(date, data.get(0).getCreateTime())){
+                report.setErpNum(ot);
+                report.setStatus(2);
+                report.setMsg("上传时间差异:"+DateUtil.formatDate(date)+","+DateUtil.formatDate(data.get(0).getCreateTime()));
+                return report;
+            }else {
+                report.setErpNum(ot);
+                report.setStatus(1);
+                return report;
+            }
+        }else {
+            List<OrderOutBoundVo> bill1 = orderInfoService.getStockSaleInfo(query1);
+            if(CollectionUtils.isEmpty(bill1)){
                 report.setErpNum(ot);
                 report.setStatus(-11);
                 report.setMsg("订单查不到数据");
                 return report;
-            }else {
-                for(OrderOutBoundVo outbound:stockSaleInfo){
+            }
+            Map<Long, List<OrderOutBoundVo>> collect = bill1.stream().collect(Collectors.groupingBy(OrderOutBoundVo::getWareInsideCode));
+
+            if(collect.size()==1){
+                for(OrderOutBoundVo outbound:bill1){
+                    ot+=outbound.getWareQty();
+                }
+                if(bill1.get(0).getWareInsideCode().equals(goodsId)){
+                    report.setErpNum(ot);
+                    report.setStatus(-22);
+                    report.setMsg("无订单有账页信息");
+                    return report;
+                }else {
+                    report.setErpNum(ot);
+                    report.setStatus(-77);
+                    report.setWareInsideCode2(bill1.get(0).getWareInsideCode().toString());
+                    report.setMsg("无订单有账页信息,商品编码对不上");
+                    return report;
+                }
+            }
+            List<OrderOutBoundVo> orderOutBoundVos = collect.get(goodsId);
+            if(!CollectionUtils.isEmpty(orderOutBoundVos)){
+                for(OrderOutBoundVo outbound:orderOutBoundVos){
                     ot+=outbound.getWareQty();
                 }
                 report.setErpNum(ot);
                 report.setStatus(-22);
                 report.setMsg("无订单有账页信息");
                 return report;
+            }else {
+                Long newGoodsId = goodsMap.get(goodsId);
+                if(newGoodsId!=null){
+                    List<OrderOutBoundVo> newVo = collect.get(newGoodsId);
+                    if(!CollectionUtils.isEmpty(newVo)){
+                        for(OrderOutBoundVo outbound:newVo){
+                            ot+=outbound.getWareQty();
+                        }
+                        report.setErpNum(ot);
+                        report.setStatus(-77);
+                        report.setWareInsideCode2(newVo.get(0).getWareInsideCode().toString());
+                        report.setMsg("无订单有账页信息,商品编码对不上");
+                        return report;
+                    }
+                }
+                for(OrderOutBoundVo outbound:bill1){
+                    ot+=outbound.getWareQty();
+                }
+                report.setErpNum(ot);
+                report.setStatus(-88);
+                report.setWareInsideCode2(bill1.get(0).getWareInsideCode().toString());
+                report.setMsg("无订单有账页信息,疑是商品编码对不上");
+                return report;
             }
+        }
 
-        }
-        for(OrderOutBoundVo outbound:data){
-            ot+=outbound.getWareQty();
-        }
-        if(!Objects.equals(st, ot)){
-            report.setErpNum(ot);
-            report.setStatus(-33);
-            report.setMsg("数据差异");
-            return report;
-        }else if(!DateUtil.isSameDate(date, data.get(0).getCreateTime())){
-            report.setErpNum(ot);
-            report.setStatus(2);
-            report.setMsg("上传时间差异:"+DateUtil.formatDate(date)+","+DateUtil.formatDate(data.get(0).getCreateTime()));
-            return report;
-        }else {
-            report.setErpNum(ot);
-            report.setStatus(1);
-            return report;
-        }
     }
 
     private List<OrderOutBoundVo> getData(OrderQuery query,Integer ftype){

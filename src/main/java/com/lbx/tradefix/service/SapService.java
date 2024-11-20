@@ -25,5 +25,8 @@ public class SapService {
     public List<SAPInfo> getSAPInfo(SAPInfoQuery query){
         return sapDao.selectSapInfo(query);
     }
-
+    @DS("sap")
+    public List<SAPInfo> getSAPDetail(Long billNo) {
+        return sapDao.selectSapDetail(billNo);
+    }
 }

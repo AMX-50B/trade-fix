@@ -14,4 +14,5 @@ public class WareInfoVo {
     private String wareCode;
     private String name;
     private Double priceMarket;
+    private String batchCode;
 }

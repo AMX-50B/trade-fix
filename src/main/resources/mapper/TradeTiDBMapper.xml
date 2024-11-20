@@ -112,9 +112,25 @@
     
     <select id="selectStockPurchaseSaleLog" parameterType="com.lbx.tradefix.vo.query.OrderQuery"
     resultType="com.lbx.tradefix.vo.OrderOutBoundVo">
-        select business_id,company_id,bill_number as orderCode,ware_inside_code,change_stock_qty as wareQty
+        select business_id,company_id,bill_number as orderCode,ware_inside_code,change_stock_qty as wareQty,
+        date_format(bill_operate_time,'%Y-%m-%d') as createTime,made_number,purchase_price
+
         from h3_stock.t_stock_purchase_sale_log
         where group_id =10000
-          and company_id =#{companyId} and business_id =#{businessId} and bill_number = #{id};
+          and company_id =#{companyId} and business_id =#{businessId} and bill_number = #{id}
+        <if test="wareInsideCode!=null">
+            and ware_inside_code = #{wareInsideCode}
+        </if>
+    </select>
+
+    <select id="selectCrmData" parameterType="com.lbx.tradefix.vo.query.OrderQuery"
+            resultType="com.lbx.tradefix.vo.OrderOutBoundVo">
+        select t.business_id,t.company_id,t.convert_code as orderCode,d.ware_inside_code,d.convert_num as wareQty
+        from h3_customer.t_cust_member_integral_convert t left join h3_customer.t_cust_member_integral_convert_detail d on t.id = d.member_integral_convert_id
+        where t.group_id =10000
+        and t.company_id =#{companyId} and t.business_id =#{businessId} and convert_code = #{billNum}
+        <if test="wareInsideCode!=null">
+            and ware_inside_code = #{wareInsideCode}
+        </if>
     </select>
 </mapper>

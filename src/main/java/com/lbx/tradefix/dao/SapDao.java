@@ -15,4 +15,6 @@ import java.util.List;
 public interface SapDao {
 
     List<SAPInfo> selectSapInfo(SAPInfoQuery query);
+
+    List<SAPInfo> selectSapDetail(Long billNo);
 }

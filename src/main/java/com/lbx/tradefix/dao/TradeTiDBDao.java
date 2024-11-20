@@ -1,5 +1,6 @@
 package com.lbx.tradefix.dao;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.lbx.tradefix.vo.OrderOutBoundVo;
 import com.lbx.tradefix.vo.OrderSapMqVo;
 import com.lbx.tradefix.vo.query.OrderBoundQuery;
@@ -13,6 +14,7 @@ import java.util.List;
  * @author LiuY
  * @date 2024/10/28
  **/
+@DS("tidb")
 public interface TradeTiDBDao {
 
     List<OrderOutBoundVo> selectOrderOutBound(OrderBoundQuery query);
@@ -30,4 +32,6 @@ public interface TradeTiDBDao {
     List<OrderOutBoundVo> selectPromotionData(OrderQuery query);
 
     List<OrderOutBoundVo>  selectStockPurchaseSaleLog(OrderQuery orderQuery);
+
+    List<OrderOutBoundVo> selectCrmData(OrderQuery orderQuery);
 }

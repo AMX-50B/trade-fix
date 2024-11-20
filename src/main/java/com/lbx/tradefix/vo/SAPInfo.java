@@ -23,4 +23,8 @@ public class SAPInfo {
     private Integer billtypeid;
     private Long line;
     private Double price;
+    private String serial;
+    private Double cost;
+    private Double amount;
+    private Long poslineno;
 }

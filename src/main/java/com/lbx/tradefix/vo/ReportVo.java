@@ -20,4 +20,7 @@ public class ReportVo {
     private Integer type;
     private Long wareInsideCode;
     private Double price;
+    private String wareInsideCode1;
+    private String wareInsideCode2;
+
 }

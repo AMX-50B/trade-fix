@@ -42,6 +42,12 @@
             order by line
         </where>
     </select>
+
+    <select id="findByLine"  resultType="com.lbx.tradefix.vo.FixDataVo">
+        select * from fix_data
+        where line = #{line}
+
+    </select>
     <update id="update" parameterType="com.lbx.tradefix.vo.FixDataVo">
         update fix_data set status = #{status},result = #{remark}
         where line = #{line}
@@ -57,9 +63,10 @@
     </insert>
 
     <insert id="insertReport">
-        insert into report(line, bill_no, sap_num, erp_num,status,msg,business_id,company_id,type,ware_inside_code,price) values
+        insert into report(line, bill_no, sap_num, erp_num,status,msg,business_id,company_id,type,ware_inside_code,price,ware_inside_code1,ware_inside_code2) values
             <foreach collection="list" separator="," item="item">
-                (#{item.line},#{item.billNo},#{item.sapNum},#{item.erpNum},#{item.status},#{item.msg},#{item.businessId},#{item.companyId},#{item.type},#{item.wareInsideCode},#{item.price})
+                (#{item.line},#{item.billNo},#{item.sapNum},#{item.erpNum},#{item.status},#{item.msg},#{item.businessId},
+                #{item.companyId},#{item.type},#{item.wareInsideCode},#{item.price},#{item.wareInsideCode1},#{item.wareInsideCode2})
             </foreach>
     </insert>
 

@@ -26,6 +26,11 @@ public class TradeFixService {
     }
 
     @DS("fix")
+    public FixDataVo getTradeFix(Long line){
+        return tradeFixDao.findByLine(line);
+    }
+
+    @DS("fix")
     public int update(FixDataVo map){
         return tradeFixDao.update(map);
     }

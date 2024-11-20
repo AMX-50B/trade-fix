@@ -26,4 +26,6 @@ public interface TradeFixDao {
     List<ReportVo> selectReport(ReportVo vo);
 
     int updateReport(ReportVo vo);
+
+    FixDataVo findByLine(Long line);
 }
