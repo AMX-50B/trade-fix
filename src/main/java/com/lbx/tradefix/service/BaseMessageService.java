@@ -73,4 +73,13 @@ public class BaseMessageService {
         }
         return wareMap;
     }
+
+    @DS("tidb")
+    public WareInfoVo getStoreWareMessageByInsideCode(Long wareInsideCode,Long businessId) {
+        WareInfoQuery query = new WareInfoQuery();
+        query.setWareInsideCode(wareInsideCode);
+        query.setBusinessId(businessId);
+        WareInfoVo vo = baseMessageDao.selectBusinessWareInfo(query);
+        return vo;
+    }
 }

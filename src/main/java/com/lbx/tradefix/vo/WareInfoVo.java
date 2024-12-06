@@ -15,4 +15,5 @@ public class WareInfoVo {
     private String name;
     private Double priceMarket;
     private String batchCode;
+    private Double movingAveragePrice;
 }

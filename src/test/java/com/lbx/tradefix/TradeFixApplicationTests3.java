@@ -52,15 +52,17 @@ public class TradeFixApplicationTests3 {
     @Autowired
     private OrderInfoService orderInfoService;
     private static Map<Long,Long> goodsMap = new HashMap<>();
+    private static Map<String,String> goodsIdConvertMap = new HashMap<>();
 
     @Test
     public void contextLoads() throws ParseException {
         goodsMap.put(1153010L,1105905L);
+        goodsIdConvertMap.put("121","22218135");
         FixDataQuery vo = new FixDataQuery();
 //        vo.setBilldate("2024-07-30");
 //        vo.setLine(84626L);
         vo.setErpNum(0d);
-        vo.setStatus(0);
+        vo.setStatus(-3);
 //        vo.setDeptid("1004");
 //        vo.setUdfcode(1160901085L);
         List<FixDataVo> fixList = tradeFixService.getTradeFixList(vo);
@@ -68,12 +70,18 @@ public class TradeFixApplicationTests3 {
         Set<String> d = fixList.stream().map(FixDataVo::getUdfcode).collect(Collectors.toSet());
         Map<String, OrgInfo> orgMap = baseMessageService.getOrgMessage(deptSet);
         Map<String, String> wareMap = baseMessageService.getWareMessage(d);
+        boolean flag = false;
         for (FixDataVo fix : fixList) {
             try {
                 String goodsid = wareMap.get(fix.getUdfcode());
                 OrgInfo business = orgMap.get(fix.getDeptid());
                 if(StringUtils.isEmpty(goodsid)||business==null){
                     throw BizException.builder().code(-1).msg("商品编码:{}或组织:{}查不到").detail(fix.getUdfcode(),fix.getDeptid()).build();
+                }
+                String convertId = goodsIdConvertMap.get(goodsid);
+                if(!StringUtils.isEmpty(convertId)){
+                    goodsid = convertId;
+                    flag = true;
                 }
                 SAPInfoQuery query = new SAPInfoQuery();
                 query.setGoodsid(goodsid);
@@ -93,6 +101,9 @@ public class TradeFixApplicationTests3 {
                     }
                 }
                 FixDataVo  fixDataVo = jugeReport(h);
+                if(flag){
+                    fixDataVo.setStatus(-3);
+                }
                 fixDataVo.setLine(fix.getLine());
                 tradeFixService.update(fixDataVo);
                 log.info("line:{} -> 比对完成：{}",fix.getLine(),JSONObject.toJSONString(fixDataVo));

@@ -17,4 +17,6 @@ public interface BaseMessageDao {
     List<OrgInfo> selectOrgInfo(OrgInfoQuery query);
 
     List<WareInfoVo> selectWareInfo(WareInfoQuery query);
+
+    WareInfoVo selectBusinessWareInfo(WareInfoQuery query);
 }

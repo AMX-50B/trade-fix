@@ -49,7 +49,7 @@
 
     </select>
     <update id="update" parameterType="com.lbx.tradefix.vo.FixDataVo">
-        update fix_data set status = #{status},result = #{remark}
+        update fix_data set status = #{status},result = #{remark},diff_num=#{diffNum}
         where line = #{line}
     </update>
 
@@ -85,6 +85,12 @@
             </if>
             <if test="price!=null">
                 ,price = #{price}
+            </if>
+            <if test="price1!=null">
+                ,price1 = #{price1}
+            </if>
+            <if test="price2!=null">
+                ,price2 = #{price2}
             </if>
         where line = #{line}
     </update>

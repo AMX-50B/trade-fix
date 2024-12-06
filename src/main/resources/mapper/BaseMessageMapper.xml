@@ -25,4 +25,9 @@
             </foreach>
         </if>
     </select>
+
+    <select id="selectBusinessWareInfo" resultType="com.lbx.tradefix.vo.WareInfoVo">
+        select ware_inside_code,ware_code,moving_average_price from h3_ware.t_ware_business_base_info
+        where business_id = #{businessId} and ware_inside_code = #{wareInsideCode}
+    </select>
 </mapper>

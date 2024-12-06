@@ -14,4 +14,6 @@ import java.util.List;
 public class WareInfoQuery extends WareInfoVo {
     private List<String> wareCodes;
     private List<Long> wareInsideCodes;
+    private Long businessId;
+    private Long wareInsideCode;
 }
