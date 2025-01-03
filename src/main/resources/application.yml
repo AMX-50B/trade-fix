@@ -23,6 +23,7 @@ spring:
           password: ydsj1f4uwH
         tidb:
           url: jdbc:mysql://10.245.1.222:33061/h3_trade?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+<<<<<<< HEAD
           username: a7d73d4e-4705-4260-aba5-1d0f6c17921c
           password: P7XIvjmVdrgTSu6k
           driver-class-name: com.mysql.cj.jdbc.Driver
@@ -35,6 +36,10 @@ spring:
           url: jdbc:mysql://10.245.1.222:33061/h3_ware?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
           username: a7d73d4e-4705-4260-aba5-1d0f6c17921c
           password: P7XIvjmVdrgTSu6k
+=======
+          username: e5351c04-d845-4ddd-8c5a-0048292f06c1
+          password: tcY6xdPrw3rtYb5D
+>>>>>>> a586cdc80c166a39e7f1f50d4f59613873a4a4e2
           driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       initial-size: 50
@@ -46,5 +51,5 @@ mybatis-plus:
   type-aliases-package: com.lbx.tradefix.vo
 logging:
   level:
-    com.lbx.tradefix.dao: info
+    com.lbx.tradefix.dao: debug
 

@@ -1,5 +1,6 @@
 package com.lbx.tradefix.dao;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.lbx.tradefix.vo.OrderOutBoundVo;
 import com.lbx.tradefix.vo.OrderSapMqVo;
 import com.lbx.tradefix.vo.OutboundDetail;
@@ -16,6 +17,7 @@ import java.util.Map;
  * @author LiuY
  * @date 2024/10/28
  **/
+@DS("tidb")
 public interface TradeTiDBDao {
 
     OrderOutBoundVo selectOrderOutBound(OrderBoundQuery query);
@@ -35,6 +37,7 @@ public interface TradeTiDBDao {
 
     List<OrderOutBoundVo> selectPromotionData(OrderQuery query);
 
+<<<<<<< HEAD
     Double selectJF(@Param("groupId") Long groupId, @Param("companyId") Long companyId, @Param("businessId") Long businessId, @Param("convertCode") String convertCode, @Param("wareInsideCode") Long wareInsideCode );
     int selectJF2(@Param("groupId") Long groupId, @Param("companyId") Long companyId, @Param("businessId") Long businessId, @Param("convertCode") String convertCode);
 
@@ -61,4 +64,9 @@ public interface TradeTiDBDao {
 
     Integer selectStock2(Long groupId, Long companyId, Long businessId);
 
+=======
+    List<OrderOutBoundVo>  selectStockPurchaseSaleLog(OrderQuery orderQuery);
+
+    List<OrderOutBoundVo> selectCrmData(OrderQuery orderQuery);
+>>>>>>> a586cdc80c166a39e7f1f50d4f59613873a4a4e2
 }

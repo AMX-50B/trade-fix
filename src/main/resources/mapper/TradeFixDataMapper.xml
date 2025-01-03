@@ -27,11 +27,15 @@
                 and sapNum > #{sapNum}
             </if>
             <if test="diffNum!=null">
-                and diffNum  = #{diffNum}
+                and diff_num  = #{diffNum}
             </if>
-            <if test="ltDiffNum!=null">
-                and diffNum  &lt;  #{ltDiffNum}
-            </if>
+<!--            <if test="ltDiffNum!=null and ltDiffnum = 0">-->
+<!--                and diff_num  >  0-->
+<!--            </if>-->
+
+<!--            <if test="ltDiffNum!=null and ltDiffnum = 1">-->
+<!--                and diff_num  &lt;  0-->
+<!--            </if>-->
             <if test="status!=null">
                 and status  = #{status}
             </if>
@@ -40,6 +44,12 @@
             </if>
             order by line
         </where>
+    </select>
+
+    <select id="findByLine"  resultType="com.lbx.tradefix.vo.FixDataVo">
+        select * from fix_data
+        where line = #{line}
+
     </select>
     <update id="update" parameterType="com.lbx.tradefix.vo.FixDataVo">
         update fix_data set status = #{status},result = #{remark}
@@ -56,12 +66,14 @@
     </insert>
 
     <insert id="insertReport">
-        insert into report(line, bill_no, sap_num, erp_num,status,msg,business_id,company_id,type,ware_inside_code) values
+        insert into report(line, bill_no, sap_num, erp_num,status,msg,business_id,company_id,type,ware_inside_code,price,ware_inside_code1,ware_inside_code2) values
             <foreach collection="list" separator="," item="item">
-                (#{item.line},#{item.billNo},#{item.sapNum},#{item.erpNum},#{item.status},#{item.msg},#{businessId},#{companyId},#{type},#{wareInsideCode})
+                (#{item.line},#{item.billNo},#{item.sapNum},#{item.erpNum},#{item.status},#{item.msg},#{item.businessId},
+                #{item.companyId},#{item.type},#{item.wareInsideCode},#{item.price},#{item.wareInsideCode1},#{item.wareInsideCode2})
             </foreach>
     </insert>
 
+<<<<<<< HEAD
     <insert id="saveResult" parameterType="com.lbx.tradefix.vo.StockEntity">
         INSERT INTO fix_result_sap(billNumber, orderId, billType, changeStockQty, sapNum, billOperateTime, wareInsideCode, status, line, groupId, companyId, businessId)
         VALUES
@@ -114,4 +126,24 @@
     <select id="getFixDate" resultType="com.lbx.tradefix.vo.StockEntity">
         select * from fix_result_final_handle_stock where billTYpe = 52 and originNum > changeStockQty;
     </select>
+=======
+    <select id="selectReport" resultType="com.lbx.tradefix.vo.ReportVo" parameterType="com.lbx.tradefix.vo.ReportVo">
+        select * from report
+        where 1=1
+            <if test="status!=null">
+                and status = #{status}
+            </if>
+    </select>
+
+    <update id="updateReport" parameterType="com.lbx.tradefix.vo.ReportVo">
+        update report set
+            <if test="status!=null">
+                status = #{status}
+            </if>
+            <if test="price!=null">
+                ,price = #{price}
+            </if>
+        where line = #{line}
+    </update>
+>>>>>>> a586cdc80c166a39e7f1f50d4f59613873a4a4e2
 </mapper>

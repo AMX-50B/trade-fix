@@ -20,17 +20,30 @@ public class OrderInfoService {
     @Autowired
     private TradeTiDBDao tiDBDao;
 
+<<<<<<< HEAD
     @DS("tidb")
     public List<StockEntity> getOrderData(OrderQuery query){
+=======
+
+    public List<OrderOutBoundVo> getOrderData(OrderQuery query){
+>>>>>>> a586cdc80c166a39e7f1f50d4f59613873a4a4e2
         return tiDBDao.selectOrderData(query);
     }
-    @DS("tidb")
+
     public List<OrderOutBoundVo> getGiftData(OrderQuery query){
         return tiDBDao.selectGiftData(query);
     }
-    @DS("tidb")
+
     public List<OrderOutBoundVo> getPromotionData(OrderQuery query){
         return tiDBDao.selectPromotionData(query);
     }
 
+
+    public List<OrderOutBoundVo> getStockSaleInfo(OrderQuery orderQuery) {
+        return tiDBDao.selectStockPurchaseSaleLog(orderQuery);
+    }
+
+    public List<OrderOutBoundVo> getCRMData(OrderQuery orderQuery) {
+        return tiDBDao.selectCrmData(orderQuery);
+    }
 }

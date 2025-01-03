@@ -13,4 +13,6 @@ public class WareInfoVo {
     private Long groupId;
     private String wareCode;
     private String name;
+    private Double priceMarket;
+    private String batchCode;
 }

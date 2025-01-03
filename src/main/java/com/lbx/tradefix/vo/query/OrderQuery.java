@@ -20,4 +20,5 @@ public class OrderQuery {
     private String billType;
     private String billNumber;
     private Integer type;
+    private String billNum;
 }

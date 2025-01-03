@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lbx.tradefix.dao.SapDao">
 
+<<<<<<< HEAD
     <select id="selectSapInfo" parameterType="com.lbx.tradefix.vo.query.SAPInfoQuery" resultType="java.lang.Double">
         SELECT
             sum(total) as total
@@ -10,6 +11,21 @@
         WHERE PBSEQID = #{billNo}
           AND GOODSID = #{goodsId}
         group by PBSEQID, GOODSID
+=======
+    <select id="selectSapInfo" parameterType="com.lbx.tradefix.vo.query.SAPInfoQuery" resultType="com.lbx.tradefix.vo.SAPInfo">
+        SELECT h.pbseqid,i.goodsid,sum(i.total) as total,i.fgtyp,h.billtypeid,i.price
+        FROM T_SAP_POS_DETAIL_H h LEFT JOIN T_SAP_POS_DETAIL_I i ON h.PKID = i.PKID
+        WHERE  h.DEPTID = #{deptid}
+        AND i.GOODSID = #{goodsid}
+        AND h.DATEUPLOAD >= TO_DATE(#{dateUploadStart},'YYYY-MM-DD HH24:mi:ss')
+        AND h.DATEUPLOAD &lt;= TO_DATE(#{dateUploadEnd},'YYYY-MM-DD HH24:mi:ss')
+        group by h.pbseqid,h.billtypeid,i.goodsid,i.fgtyp,i.price
+    </select>
+    <select id="selectSapDetail"  resultType="com.lbx.tradefix.vo.SAPInfo">
+        SELECT h.pbseqid,h.i.goodsid,i.total,i.fgtyp,h.billtypeid,i.price,i.poslineno,i.amount,i.cost,i.serial
+        FROM T_SAP_POS_DETAIL_H h LEFT JOIN T_SAP_POS_DETAIL_I i ON h.PKID = i.PKID
+        WHERE  h.pbseqid = #{billNo}
+>>>>>>> a586cdc80c166a39e7f1f50d4f59613873a4a4e2
     </select>
 
     <select id="selectSapInfo2" parameterType="com.lbx.tradefix.vo.query.SAPInfoQuery" resultType="com.lbx.tradefix.vo.SAPInfo">

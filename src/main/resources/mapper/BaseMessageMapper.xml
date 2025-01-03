@@ -10,10 +10,19 @@
     </select>
 
     <select id="selectWareInfo" resultType="com.lbx.tradefix.vo.WareInfoVo">
-        select id,ware_inside_code,group_id,ware_code from h3_ware.t_ware_group_base_info
-        where group_id = 10000 and ware_code in
-        <foreach collection="wareCodes" open="(" close=")" separator="," item="item">
-            #{item}
-        </foreach>
+        select id,ware_inside_code,group_id,ware_code,price_market from h3_ware.t_ware_group_base_info
+        where group_id = 10000
+        <if test="wareCodes!=null">
+            and ware_code in
+            <foreach collection="wareCodes" open="(" close=")" separator="," item="item">
+                #{item}
+            </foreach>
+        </if>
+        <if test="wareInsideCodes!=null">
+            and ware_inside_code in
+            <foreach collection="wareInsideCodes" open="(" close=")" separator="," item="item">
+                #{item}
+            </foreach>
+        </if>
     </select>
 </mapper>

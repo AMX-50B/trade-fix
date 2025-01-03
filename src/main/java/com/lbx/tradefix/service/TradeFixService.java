@@ -27,12 +27,22 @@ public class TradeFixService {
     }
 
     @DS("fix")
+<<<<<<< HEAD
     public void updateFixDataVo(FixDataVo fix) {
         tradeFixDao.updateFixDataVo(fix);
     }
     @DS("fix")
     public void saveResult(StockEntity stockEntity) {
         tradeFixDao.saveResult(stockEntity);
+=======
+    public FixDataVo getTradeFix(Long line){
+        return tradeFixDao.findByLine(line);
+    }
+
+    @DS("fix")
+    public int update(FixDataVo map){
+        return tradeFixDao.update(map);
+>>>>>>> a586cdc80c166a39e7f1f50d4f59613873a4a4e2
     }
 
     @DS("fix")
@@ -84,5 +94,16 @@ public class TradeFixService {
     @DS("fix")
     public List<StockEntity> getFixDate() {
         return tradeFixDao.getFixDate();
+    }
+
+    @DS("fix")
+    public List<ReportVo> getReport(ReportVo vo) {
+        return tradeFixDao.selectReport(vo);
+    }
+
+    @DS("fix")
+    public int updateReport(ReportVo vo) {
+        return tradeFixDao.updateReport(vo);
+
     }
 }

@@ -25,9 +25,15 @@ public class SapService {
     public Double getSAPInfo(SAPInfoQuery query){
         return sapDao.selectSapInfo(query);
     }
+<<<<<<< HEAD
 
     @DS("sap")
     public List<SAPInfo> getSAPInfo2(SAPInfoQuery query){
         return sapDao.selectSapInfo2(query);
+=======
+    @DS("sap")
+    public List<SAPInfo> getSAPDetail(Long billNo) {
+        return sapDao.selectSapDetail(billNo);
+>>>>>>> a586cdc80c166a39e7f1f50d4f59613873a4a4e2
     }
 }

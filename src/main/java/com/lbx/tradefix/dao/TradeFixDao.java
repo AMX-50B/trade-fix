@@ -24,6 +24,7 @@ public interface TradeFixDao {
 
     int insertReport(@Param("list") List<ReportVo> h);
 
+<<<<<<< HEAD
     void saveResult(StockEntity stockEntity);
 
     void updateFixDataVo(FixDataVo fix);
@@ -48,4 +49,11 @@ public interface TradeFixDao {
 
     List<StockEntity> getFixDate();
 
+=======
+    List<ReportVo> selectReport(ReportVo vo);
+
+    int updateReport(ReportVo vo);
+
+    FixDataVo findByLine(Long line);
+>>>>>>> a586cdc80c166a39e7f1f50d4f59613873a4a4e2
 }
