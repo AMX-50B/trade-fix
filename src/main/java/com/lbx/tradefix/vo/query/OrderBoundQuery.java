@@ -11,8 +11,9 @@ import java.util.List;
  **/
 @Data
 public class OrderBoundQuery extends OrderOutBoundVo {
-    private List<String> outboundCodes;
-    private List<String> orderCodes;
-    private String modifyTimeStart;
-    private String modifyTimeEnd;
+    private String billNo;
+    private Long groupId;
+    private Long companyId;
+    private Long businessId;
+    private int billType;
 }

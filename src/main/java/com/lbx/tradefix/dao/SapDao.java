@@ -14,5 +14,6 @@ import java.util.List;
 @Mapper
 public interface SapDao {
 
-    List<SAPInfo> selectSapInfo(SAPInfoQuery query);
+    Double selectSapInfo(SAPInfoQuery query);
+    List<SAPInfo> selectSapInfo2(SAPInfoQuery query);
 }

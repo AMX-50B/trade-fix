@@ -22,8 +22,12 @@ public class SapService {
     private SapDao sapDao;
 
     @DS("sap")
-    public List<SAPInfo> getSAPInfo(SAPInfoQuery query){
+    public Double getSAPInfo(SAPInfoQuery query){
         return sapDao.selectSapInfo(query);
     }
 
+    @DS("sap")
+    public List<SAPInfo> getSAPInfo2(SAPInfoQuery query){
+        return sapDao.selectSapInfo2(query);
+    }
 }

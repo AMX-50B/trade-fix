@@ -10,16 +10,5 @@ import java.util.Date;
  **/
 @Data
 public class OrderOutBoundVo {
-    Long id;
-    private Long groupId;
-    private Long companyId;
-    private Long businessId;
-    private Long orderId;
-    private String orderCode;
-    private String outboundCode;
-    private Integer billType;
-    private Date modifyTime;
-    private Date createTime;
-    private Long wareInsideCode;
-    private Double wareQty;
+    private String orderId;
 }
