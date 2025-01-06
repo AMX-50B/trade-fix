@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lbx.tradefix.dao.TradeFixDao">
+
+    <select id="findByCondition" parameterType="com.lbx.tradefix.vo.query.FixDataQuery" resultType="com.lbx.tradefix.vo.FixDataVo">
+        select * from fix_data_xm_2
+        <where> 1=1
+            <if test="billdate!=null">
+                and billdate = #{billdate}
+            </if>
+            <if test="billdateStart!=null">
+                and billdate >= #{billdateStart}
+            </if>
+            <if test="billdateEnd!=null">
+                and billdate &lt;= #{billdateEnd}
+            </if>
+            <if test="deptid!=null">
+                and deptid = #{deptid}
+            </if>
+            <if test="udfcode!=null">
+                and udfcode = #{udfcode}
+            </if>
+            <if test="erpNum!=null">
+                and erp_num != #{erpNum}
+            </if>
+            <if test="sapNum!=null">
+                and sapNum > #{sapNum}
+            </if>
+            <if test="diffNum!=null">
+                and diffNum  = #{diffNum}
+            </if>
+            <if test="ltDiffNum!=null">
+                and diffNum  &lt;  #{ltDiffNum}
+            </if>
+            <if test="status!=null">
+                and status  = #{status}
+            </if>
+            <if test="line!=null">
+                and line >= #{line}
+            </if>
+            order by line
+        </where>
+    </select>
+    <update id="update" parameterType="com.lbx.tradefix.vo.FixDataVo">
+        update fix_data set status = #{status},result = #{remark}
+        where line = #{line}
+    </update>
+
+    <insert id="insertSapData">
+        insert into sap_data(line, billdate, pkid, deptid, goodsid, pbseqid, posbillno, total, billtypeid, fgtyp,dateupload)
+            values
+                <foreach collection="list" separator="," item="item">
+                    (#{item.line},#{item.billdate},#{item.pkid},#{item.deptid},
+                    #{item.goodsid},#{item.pbseqid},#{item.posbillno},#{item.total},#{item.billtypeid},#{item.fgtyp},#{item.dateupload})
+                </foreach>
+    </insert>
+
+    <insert id="insertReport">
+        insert into report(line, bill_no, sap_num, erp_num,status,msg,business_id,company_id,type,ware_inside_code) values
+            <foreach collection="list" separator="," item="item">
+                (#{item.line},#{item.billNo},#{item.sapNum},#{item.erpNum},#{item.status},#{item.msg},#{businessId},#{companyId},#{type},#{wareInsideCode})
+            </foreach>
+    </insert>
+
+    <insert id="saveResult" parameterType="com.lbx.tradefix.vo.StockEntity">
+        INSERT INTO fix_result_sap(billNumber, orderId, billType, changeStockQty, sapNum, billOperateTime, wareInsideCode, status, line, groupId, companyId, businessId)
+        VALUES
+            (#{billNumber}, #{orderId}, #{billType}, #{changeStockQty}, #{sapNum}, #{billOperateTime}, #{wareInsideCode}, #{status}, #{line}, #{groupId}, #{companyId}, #{businessId});
+    </insert>
+
+    <update id="updateFixDataVo" parameterType="com.lbx.tradefix.vo.FixDataVo">
+        update fix_data_xm_2 set status = #{status}
+        where line = #{line}
+    </update>
+
+    <select id="list2" resultType="com.lbx.tradefix.vo.StockEntity">
+        select * from fix_result_final_handle
+    </select>
+
+    <select id="list3" resultType="com.lbx.tradefix.vo.StockEntity">
+        select * from fix_result_stock2
+    </select>
+
+    <update id="updateOriginNumById">
+        update fix_result_stock2 set originNum = #{originNum}
+        where id = #{id}
+    </update>
+
+    <update id="updatePrice">
+        update fix_result_final_handle set price = #{price}
+        where id = #{id}
+    </update>
+
+    <select id="selectByOriginNum" resultType="com.lbx.tradefix.vo.StockEntity">
+        select * from fix_result_final where `status` != 3 and originNum = 0;
+    </select>
+
+    <update id="updateStatue">
+        update fix_result_final set status = #{status} where id = #{id}
+    </update>
+
+    <update id="updateBillType">
+        update fix_result_final set billType = #{billType} where id = #{id}
+    </update>
+
+    <update id="updateChangeStockQty">
+        update fix_result_sap set changeStockQty = #{changeStockQty} where id = #{id}
+    </update>
+
+    <update id="updateOrderId">
+        update fix_result_sap set orderId = #{orderId} where id = #{id}
+    </update>
+
+    <select id="getFixDate" resultType="com.lbx.tradefix.vo.StockEntity">
+        select * from fix_result_final_handle_stock where billTYpe = 52 and originNum > changeStockQty;
+    </select>
+</mapper>

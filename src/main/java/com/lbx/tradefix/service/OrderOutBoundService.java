@@ -20,18 +20,13 @@ public class OrderOutBoundService {
     private TradeTiDBDao tiDBDao;
 
     @DS("tidb")
-    public List<OrderOutBoundVo> getOutbound(OrderBoundQuery query){
+    public OrderOutBoundVo getOutbound(OrderBoundQuery query){
         return tiDBDao.selectOrderOutBound(query);
     }
 
-    @DS("tidb")
-    public OrderOutBoundVo getOutboundMain(OrderBoundQuery query){
-        return tiDBDao.getOutboundMain(query);
-    }
 
     @DS("tidb")
-    public List<OrderOutBoundVo> getOutboundDetail(Long outboundId,Long wareInsideCode){
-        return tiDBDao.getOutboundDetail( outboundId, wareInsideCode);
+    public Long getOutboundId(OrderBoundQuery query) {
+        return tiDBDao.getOutboundId(query);
     }
-
 }

@@ -9,6 +9,8 @@ import lombok.Data;
  **/
 @Data
 public class SAPInfoQuery extends SAPInfo {
+    private Long billNo;
+    private Long goodsId;
     private String dateUploadStart;
     private String dateUploadEnd;
 }

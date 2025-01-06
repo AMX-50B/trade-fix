@@ -1,0 +1,50 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: trade-fix
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    dynamic:
+      #设置默认的数据源或者数据源组,默认值即为master
+      primary: fix
+      #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+      strict: false
+      datasource:
+        fix:
+          url: jdbc:mysql://10.233.2.126:3304/trade_data_fix?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+          username: h3_agent
+          password: K6CJLfR6Z!ay
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        sap:
+          driver-class-name: oracle.jdbc.driver.OracleDriver
+          url: jdbc:oracle:thin:@(DESCRIPTION =(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=10.233.8.10)(PORT=1555)))(CONNECT_DATA=(SERVICE_NAME=ORCL)))
+          username: reader
+          password: ydsj1f4uwH
+        tidb:
+          url: jdbc:mysql://10.245.1.222:33061/h3_trade?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+          username: a7d73d4e-4705-4260-aba5-1d0f6c17921c
+          password: P7XIvjmVdrgTSu6k
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        tidbc:
+          url: jdbc:mysql://10.245.1.222:33061/h3_customer?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+          username: a7d73d4e-4705-4260-aba5-1d0f6c17921c
+          password: P7XIvjmVdrgTSu6k
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        tidbd:
+          url: jdbc:mysql://10.245.1.222:33061/h3_ware?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+          username: a7d73d4e-4705-4260-aba5-1d0f6c17921c
+          password: P7XIvjmVdrgTSu6k
+          driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      initial-size: 50
+      max-active: 100
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  type-aliases-package: com.lbx.tradefix.vo
+logging:
+  level:
+    com.lbx.tradefix.dao: info
+

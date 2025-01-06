@@ -15,7 +15,7 @@
         </if>
         <if test="id!=null">
             and t.id =#{id}
-        </if>`
+        </if>
     </select>
 
     <select id="selectPromotionData" resultType="com.lbx.tradefix.vo.OrderOutBoundVo" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
@@ -32,6 +32,83 @@
           </if>
     </select>
 
+<<<<<<< HEAD
+    <select id="selectOrderData" resultType="com.lbx.tradefix.vo.StockEntity" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
+        select
+            group_id,
+            company_id,
+            business_id,
+            bill_type,
+            bill_number,
+            ware_inside_code,
+            sum(change_stock_qty) as change_stock_qty,
+            bill_operate_time
+        from
+        h3_stock.t_stock_purchase_sale_log
+        where
+        group_id = 10000
+        and company_id = #{companyId}
+        and business_id = #{businessId}
+        and ware_inside_code = #{wareInsideCode}
+        and bill_operate_time >= #{billOperateTimeStart}
+        and bill_operate_time &lt;= #{billOperateTimeEnd}
+        and bill_type in (24, 108, 51, 52)
+        group by
+            bill_type,
+            bill_number,
+            ware_inside_code,
+            bill_operate_time
+    </select>
+
+    <select id="selectOrderData2" resultType="com.lbx.tradefix.vo.StockEntity" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
+        select
+            group_id,
+            company_id,
+            business_id,
+            bill_type,
+            bill_number,
+            ware_inside_code,
+            sum(change_stock_qty) as change_stock_qty
+        from
+            h3_stock.t_stock_purchase_sale_log
+        where
+            group_id = 10000
+          and company_id = #{companyId}
+          and business_id = #{businessId}
+          and ware_inside_code = #{wareInsideCode}
+          and bill_number = #{billNumber}
+          and bill_type in (24, 108, 51, 52)
+        group by
+            bill_type,
+            bill_number,
+            ware_inside_code
+    </select>
+
+
+    <select id="selectOrderDataFromOrder" resultType="com.lbx.tradefix.vo.StockEntity" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
+        SELECT
+            order_id,
+            ware_inside_code,
+            sum( ware_qty ) as erpNum
+        FROM
+            (
+                SELECT
+                    order_id,
+                    ware_inside_code,
+                    ware_qty,
+                    create_time
+                FROM
+                    h3_trade.t_order_detail
+                WHERE
+                    group_id = 10000
+                  AND company_id = #{companyId}
+                  AND business_id = #{businessId}
+                  AND ware_inside_code = #{wareInsideCode}
+                  AND create_time >= #{billOperateTimeStart}
+                  AND create_time &lt;= #{billOperateTimeEnd}
+                  AND ware_qty > 0) a
+        group by order_id, ware_inside_code
+=======
     <select id="selectOrderData" resultType="com.lbx.tradefix.vo.OrderOutBoundVo" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
         select d.order_id as id,d.group_id,d.company_id,d.business_id,d.settle_time as create_time,t.ware_inside_code,t.ware_qty as wareQty
         from h3_trade.t_order_info d left join h3_trade.t_order_detail t
@@ -45,6 +122,7 @@
         <if test="wareInsideCode!=null">
             and t.ware_inside_code = #{wareInsideCode}
         </if>
+>>>>>>> a586cdc80c166a39e7f1f50d4f59613873a4a4e2
     </select>
 
     <select id="selectGiftData" resultType="com.lbx.tradefix.vo.OrderOutBoundVo" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
@@ -71,26 +149,13 @@
     </select>
     <select id="selectOrderOutBound" parameterType="com.lbx.tradefix.vo.query.OrderBoundQuery"
             resultType="com.lbx.tradefix.vo.OrderOutBoundVo">
-        select t.id,t.group_id,t.company_id,t.business_id,t.order_code,t.outbound_code,
-        t.order_id,t.bill_type,t.modify_time,d.ware_inside_code,d.ware_qty as ware_qty
-        from h3_trade.t_order_outbound t left join h3_trade.t_order_outbound_detail d
-        on t.id = d.outbound_id and t.group_id and d.group_id
-        where t.group_id = 10000 and d.group_id = 10000
-        and t.company_id = #{companyId} and d.company_id = #{companyId}
-        and t.business_id = #{businessId} and d.business_id = #{businessId}
-
-        <if test="orderCodes!=null">
-            and t.order_code in
-            <foreach collection="orderCodes" open="(" item="item" close=")" separator=",">
-                #{item}
-            </foreach>
-        </if>
-        <if test="outboundCodes!=null">
-            and t.id in
-            <foreach collection="outboundCodes" open="(" item="item" close=")" separator=",">
-                #{item}
-            </foreach>
-        </if>
+        select
+            order_id
+        from
+            h3_trade.t_order_outbound
+        where
+            id = #{billNo}
+        and bill_type = #{billType}
     </select>
 
     <select id="selectOrderSapMq" parameterType="com.lbx.tradefix.vo.query.OrderSapMqQuery"
@@ -115,6 +180,195 @@
         select business_id,company_id,bill_number as orderCode,ware_inside_code,change_stock_qty as wareQty,
         date_format(bill_operate_time,'%Y-%m-%d') as createTime,made_number,purchase_price
 
+<<<<<<< HEAD
+    <select id="selectJF" resultType="java.lang.Double">
+        SELECT
+            sum(b.convert_num)
+        FROM
+            t_cust_member_integral_convert a
+                LEFT JOIN t_cust_member_integral_convert_detail b ON a.id = b.member_integral_convert_id
+                AND b.ware_inside_code = #{wareInsideCode}
+        WHERE
+            a.group_id = #{groupId}
+          AND a.company_id = #{companyId}
+          and a.business_id = #{businessId}
+          AND a.convert_code = #{convertCode}
+    </select>
+
+    <select id="selectJF2" resultType="java.lang.Integer">
+
+        SELECT
+            count(1)
+        FROM
+            t_cust_member_integral_convert a
+                LEFT JOIN t_cust_member_integral_convert_detail b ON a.id = b.member_integral_convert_id
+        WHERE
+            a.group_id = #{groupId}
+          AND a.company_id = #{companyId}
+          and a.business_id = #{businessId}
+          AND a.convert_code = #{convertCode}
+    </select>
+
+    <select id="selectOtherGift" resultType="java.lang.Double">
+        SELECT sum(b.give_num)
+        FROM t_other_gifts_stock a
+                 INNER JOIN t_other_gifts_stock_detail b ON a.id = b.other_gifts_stock_id
+            and b.ware_inside_code = #{wareInsideCode}
+        WHERE a.group_id = #{groupId}
+          AND a.company_id = #{companyId}
+          AND a.business_id = #{businessId}
+          AND a.bill_no = #{billNo}
+    </select>
+
+    <select id="selectOtherGift2" resultType="int">
+        SELECT count(1)
+        FROM t_other_gifts_stock a
+                 INNER JOIN t_other_gifts_stock_detail b ON a.id = b.other_gifts_stock_id
+        WHERE a.group_id = #{groupId}
+          AND a.company_id = #{companyId}
+          AND a.business_id = #{businessId}
+          AND a.bill_no = #{billNo}
+    </select>
+
+    <select id="selectOrder" resultType="java.lang.Double">
+        SELECT
+            sum(ware_qty)
+        FROM
+            t_order_detail
+        WHERE
+            group_id = #{groupId}
+          AND company_id = #{companyId}
+          AND business_id = #{businessId}
+          AND order_id = #{orderId}
+          AND ware_inside_code = #{wareInsideCode}
+    </select>
+
+    <select id="selectOrder2" resultType="int">
+        SELECT
+            count(1)
+        FROM
+            t_order_detail
+        WHERE
+            group_id = #{groupId}
+          AND company_id = #{companyId}
+          AND business_id = #{businessId}
+          AND order_id = #{orderId}
+    </select>
+
+    <select id="selectPromotionGift" resultType="java.lang.Double">
+        SELECT
+            sum(b.give_num)
+        FROM
+            t_promotion_gift_stock a
+                INNER JOIN t_promotion_gift_stock_detail b ON a.id = b.promotion_gift_stock_id
+                AND b.ware_inside_code = #{wareInsideCode}
+        WHERE
+            a.group_id = #{groupId}
+          AND a.company_id = #{companyId}
+          AND a.business_id = #{businessId}
+          AND a.bill_no = #{billNo}
+
+    </select>
+
+    <select id="selectPromotionGift2" resultType="int">
+        SELECT
+            count(1)
+        FROM
+            t_promotion_gift_stock a
+                INNER JOIN t_promotion_gift_stock_detail b ON a.id = b.promotion_gift_stock_id
+        WHERE
+            a.group_id = #{groupId}
+          AND a.company_id = #{companyId}
+          AND a.business_id = #{businessId}
+          AND a.bill_no = #{billNo}
+
+    </select>
+
+    <select id="selectPrice" resultType="java.lang.Double">
+        select moving_average_price
+        from t_ware_business_base_info
+        where business_id = #{businessId}
+          and ware_inside_code = #{wareInsideCode}
+    </select>
+
+    <select id="getOutboundId" resultType="java.lang.Long">
+        select id
+        from t_order_outbound
+        where group_id = #{groupId}
+          and company_id = #{companyId}
+          and business_id = #{businessId}
+          and order_id = #{orderId}
+        and bill_type = #{billType}
+    </select>
+
+    <select id="selectNum" resultType="java.lang.Double">
+        select
+            sum(change_stock_qty)
+        from
+            h3_stock.t_stock_purchase_sale_log
+        where
+            group_id = 10000
+          and company_id = #{companyId}
+          and business_id = #{businessId}
+          and ware_inside_code = #{wareInsideCode}
+          and bill_number = #{billNumber}
+          and bill_type = #{billType}
+    </select>
+
+    <select id="selectBillNoByOrderId" resultType="java.lang.String">
+        select a.bill_no
+        from t_promotion_gift_stock a
+                 inner join t_promotion_gift_stock_detail b
+                            on a.id = b.promotion_gift_stock_id and b.order_id = #{orderId} and
+                               b.ware_inside_code = #{wareInsideCode}
+    </select>
+
+    <select id="selectOrderIdByBillNo" resultType="java.lang.Long">
+        SELECT
+            b.order_id
+        FROM
+            t_promotion_gift_stock a
+                INNER JOIN t_promotion_gift_stock_detail b ON a.id = b.promotion_gift_stock_id
+                AND b.ware_inside_code = #{wareInsideCode}
+        WHERE
+            a.bill_no = #{billNumber}
+    </select>
+
+    <select id="selectStock" resultType="com.lbx.tradefix.vo.OutboundDetail">
+        select
+            a.group_id as groupId,
+            a.company_id as companyId,
+            a.business_id as businessId,
+            a.bill_no as billNumber,
+            '52' as billType,
+            '2' as businessType,
+            b.ware_inside_code as wareInsideCode,
+            b.made_number as madeNumber,
+            b.batch_code as batchCode,
+            '1' as stallType,
+            b.give_num as applyQty
+        from
+            h3_trade.t_other_gifts_stock a
+                inner join h3_trade.t_other_gifts_stock_detail b on a.id = b.other_gifts_stock_id
+        where
+            a.group_id = #{groupId}
+          and a.company_id = #{companyId}
+          and a.business_id = #{businessId}
+          and a.bill_no = #{billNo}
+          and b.ware_inside_code = #{wareInsideCode}
+    </select>
+
+    <select id="selectStock2" resultType="java.lang.Integer">
+        select
+            stall_id
+        from
+            h3_stock.t_stock_stall
+        where
+            group_id = #{groupId}
+          and company_id = #{companyId}
+          and business_id = #{businessId}
+          and stall_type = 1
+=======
         from h3_stock.t_stock_purchase_sale_log
         where group_id =10000
           and company_id =#{companyId} and business_id =#{businessId} and bill_number = #{id}
@@ -132,5 +386,6 @@
         <if test="wareInsideCode!=null">
             and ware_inside_code = #{wareInsideCode}
         </if>
+>>>>>>> a586cdc80c166a39e7f1f50d4f59613873a4a4e2
     </select>
 </mapper>

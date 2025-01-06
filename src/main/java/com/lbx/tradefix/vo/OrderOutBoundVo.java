@@ -10,6 +10,9 @@ import java.util.Date;
  **/
 @Data
 public class OrderOutBoundVo {
+<<<<<<< HEAD
+    private String orderId;
+=======
     Long id;
     private Long groupId;
     private Long companyId;
@@ -24,4 +27,5 @@ public class OrderOutBoundVo {
     private Date createTime;
     private Long wareInsideCode;
     private Double wareQty;
+>>>>>>> a586cdc80c166a39e7f1f50d4f59613873a4a4e2
 }
