@@ -94,4 +94,33 @@
             </if>
         where line = #{line}
     </update>
+
+    <select id="findXmByCondition" resultType="com.lbx.tradefix.vo.FixDataVo">
+        select * from fix_data_xm
+        where 1=1
+            <if test="status!=null">
+                and status = #{status}
+            </if>
+    </select>
+
+    <insert id="insertFixResultStock">
+        insert into fix_result_stock(billNumber, orderId, billType, changeStockQty, sapNum, billOperateTime, wareInsideCode, status, originNum,line,companyId,businessId)
+        values
+        <foreach collection="list" separator="," item="item">
+            (#{item.billNumber},#{item.orderId},#{item.billType},#{item.changeStockQty},#{item.sapNum},#{item.billOperateTime},#{item.wareInsideCode},#{item.status},#{item.originNum},
+            #{item.line},#{item.companyId},#{item.businessId})
+        </foreach>
+
+    </insert>
+
+    <insert id="insertFixResultStockLy">
+        insert into fix_result_stock_ly(billNumber, orderId, billType, changeStockQty, sapNum, billOperateTime, wareInsideCode, status, originNum,line,companyId,businessId,
+        remark,sapDate,stockDate,result)
+        values
+        <foreach collection="list" separator="," item="item">
+            (#{item.billNumber},#{item.orderId},#{item.billType},#{item.changeStockQty},#{item.sapNum},#{item.billOperateTime},#{item.wareInsideCode},#{item.status},#{item.originNum},
+            #{item.line},#{item.companyId},#{item.businessId},#{item.remark},#{item.sapDate},#{item.stockDate},#{item.result})
+        </foreach>
+
+    </insert>
 </mapper>

@@ -15,4 +15,5 @@ public class OrderBoundQuery extends OrderOutBoundVo {
     private List<String> orderCodes;
     private String modifyTimeStart;
     private String modifyTimeEnd;
+    private List<Long> orderIds;
 }

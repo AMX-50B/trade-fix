@@ -15,7 +15,30 @@
         </if>
         <if test="id!=null">
             and t.id =#{id}
+        </if>
+        <if test="billType!=null">
+            and t.bill_type = #{billType}
+        </if>
+    </select>
+
+    <select id="getOutboundMainBatch" parameterType="com.lbx.tradefix.vo.query.OrderBoundQuery"
+            resultType="com.lbx.tradefix.vo.OrderOutBoundVo">
+        select t.id,t.group_id,t.company_id,t.business_id,t.order_code,t.outbound_code,
+        t.order_id,t.bill_type,t.modify_time,t.create_time
+        from h3_trade.t_order_outbound t
+        where
+        t.group_id = 10000
+        and t.company_id = #{companyId}
+        and t.business_id = #{businessId}
+        <if test="orderId!=null">
+            and t.order_id = #{orderId}
+        </if>
+        <if test="id!=null">
+            and t.id =#{id}
         </if>`
+        <if test="billType!=null">
+            and t.bill_type = #{billType}
+        </if>
     </select>
 
     <select id="selectPromotionData" resultType="com.lbx.tradefix.vo.OrderOutBoundVo" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
@@ -74,7 +97,7 @@
         select t.id,t.group_id,t.company_id,t.business_id,t.order_code,t.outbound_code,
         t.order_id,t.bill_type,t.modify_time,d.ware_inside_code,d.ware_qty as ware_qty
         from h3_trade.t_order_outbound t left join h3_trade.t_order_outbound_detail d
-        on t.id = d.outbound_id and t.group_id and d.group_id
+        on t.id = d.outbound_id and t.group_id = d.group_id
         where t.group_id = 10000 and d.group_id = 10000
         and t.company_id = #{companyId} and d.company_id = #{companyId}
         and t.business_id = #{businessId} and d.business_id = #{businessId}
@@ -90,6 +113,15 @@
             <foreach collection="outboundCodes" open="(" item="item" close=")" separator=",">
                 #{item}
             </foreach>
+        </if>
+        <if test="orderIds!=null">
+            and t.order_id in
+            <foreach collection="orderIds" open="(" item="item" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="billType!=null">
+            and t.bill_type = #{billType}
         </if>
     </select>
 
@@ -117,7 +149,13 @@
 
         from h3_stock.t_stock_purchase_sale_log
         where group_id =10000
-          and company_id =#{companyId} and business_id =#{businessId} and bill_number = #{id}
+          and company_id =#{companyId} and business_id =#{businessId}
+        <if test="id!=null">
+            and bill_number = #{id}
+        </if>
+        <if test="ids!=null">
+            and order_id in <foreach collection="ids" open="(" item="item" close=")" separator=",">#{item}</foreach>
+        </if>
         <if test="wareInsideCode!=null">
             and ware_inside_code = #{wareInsideCode}
         </if>
@@ -132,5 +170,53 @@
         <if test="wareInsideCode!=null">
             and ware_inside_code = #{wareInsideCode}
         </if>
+    </select>
+
+<!--    1111-->
+
+    <select id="selectPromotionDataByCondition" resultType="com.lbx.tradefix.vo.OrderOutBoundVo" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
+        select t.order_id,d.bill_no as id,d.group_id,d.company_id,d.business_id,d.give_date as create_time,t.ware_inside_code,t.give_num as wareQty
+        from h3_trade.t_promotion_gift_stock d left join h3_trade.t_promotion_gift_stock_detail t
+        on t.group_id = d.group_id and d.id = t.promotion_gift_stock_id
+        where d.group_id = 10000 and t.group_id = 10000
+        and d.business_id = #{businessId}  and d.company_id = #{companyId}
+        and t.ware_inside_code = #{wareInsideCode}
+        and d.give_date >= #{orderStartDate} and d.give_date &lt;= #{orderEndDate}
+
+    </select>
+
+    <select id="selectOrderDataByCondition" resultType="com.lbx.tradefix.vo.OrderOutBoundVo" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
+        select d.order_id as id,d.group_id,d.company_id,d.business_id,d.settle_time as create_time,t.ware_inside_code,t.ware_qty as wareQty
+        from h3_trade.t_order_info d left join h3_trade.t_order_detail t
+        on t.group_id = d.group_id and t.order_id = d.order_id
+        where d.group_id = 10000 and t.group_id = 10000
+        and t.business_id = #{businessId} and d.business_id=#{businessId}
+        and t.company_id = #{companyId} and d.company_id = #{companyId}
+        and t.ware_inside_code = #{wareInsideCode}
+        and d.trade_finish_time >= #{orderStartDate} and d.trade_finish_time &lt;= #{orderEndDate}
+
+    </select>
+
+    <select id="selectGiftDataByCondition" resultType="com.lbx.tradefix.vo.OrderOutBoundVo" parameterType="com.lbx.tradefix.vo.query.OrderQuery">
+        select d.bill_no as id,d.group_id,d.company_id,d.business_id,d.give_date as create_time,t.ware_inside_code,t.give_num as wareQty
+        from h3_trade.t_other_gifts_stock d left join h3_trade.t_other_gifts_stock_detail t
+        on t.group_id = d.group_id and d.id = t.other_gifts_stock_id
+        where d.group_id = 10000 and t.group_id = 10000
+        and d.business_id = #{businessId}  and d.company_id = #{companyId}
+        and t.ware_inside_code = #{wareInsideCode}
+        and d.effective_time >= #{orderStartDate} and d.effective_time &lt;= #{orderEndDate}
+
+    </select>
+
+    <select id="selectCrmDataByCondition" parameterType="com.lbx.tradefix.vo.query.OrderQuery"
+            resultType="com.lbx.tradefix.vo.OrderOutBoundVo">
+        select t.business_id,t.company_id,t.convert_code as id,d.ware_inside_code,d.convert_num as wareQty
+        from h3_customer.t_cust_member_integral_convert t left join h3_customer.t_cust_member_integral_convert_detail d on t.id = d.member_integral_convert_id
+        where t.group_id =10000
+        and t.company_id =#{companyId} and t.business_id =#{businessId}
+        and d.ware_inside_code = #{wareInsideCode}
+        and t.modify_time >= #{orderStartDate}  and t.modify_time &lt;= #{orderEndDate}
+
+
     </select>
 </mapper>

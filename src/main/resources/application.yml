@@ -23,8 +23,8 @@ spring:
           password: ydsj1f4uwH
         tidb:
           url: jdbc:mysql://10.245.1.222:33061/h3_trade?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
-          username: 2f755c18-0c00-48d7-9454-e94c897de38a
-          password: GMJXry8FOCn7sCFO
+          username: 306b0a18-7b03-4609-8185-48b47f2c7439
+          password: KilOlar7yPhcBIyh
           driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       initial-size: 50

@@ -2,6 +2,8 @@ package com.lbx.tradefix.vo.query;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author LiuY
  * @date 2024/10/30
@@ -15,4 +17,7 @@ public class OrderQuery {
     private Long wareInsideCode;
     private Integer type;
     private String billNum;
+    private String orderStartDate;
+    private String orderEndDate;
+    private List<Long> ids;
 }

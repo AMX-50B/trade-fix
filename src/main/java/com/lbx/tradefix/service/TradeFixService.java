@@ -20,37 +20,42 @@ public class TradeFixService {
     @Autowired
     private TradeFixDao tradeFixDao;
 
-    @DS("fix")
+    
     public List<FixDataVo> getTradeFixList(FixDataQuery map){
         return tradeFixDao.findByCondition(map);
     }
 
-    @DS("fix")
+    
+    public List<FixDataVo> getXmTradeFixList(FixDataQuery map){
+        return tradeFixDao.findXmByCondition(map);
+    }
+
+    
     public FixDataVo getTradeFix(Long line){
         return tradeFixDao.findByLine(line);
     }
 
-    @DS("fix")
+    
     public int update(FixDataVo map){
         return tradeFixDao.update(map);
     }
 
-    @DS("fix")
+    
     public int insertSapData(List<SAPInfo> info) {
         return tradeFixDao.insertSapData(info);
     }
 
-    @DS("fix")
+    
     public int insertReport(List<ReportVo> h) {
         return tradeFixDao.insertReport(h);
     }
 
-    @DS("fix")
+    
     public List<ReportVo> getReport(ReportVo vo) {
         return tradeFixDao.selectReport(vo);
     }
 
-    @DS("fix")
+    
     public int updateReport(ReportVo vo) {
         return tradeFixDao.updateReport(vo);
 

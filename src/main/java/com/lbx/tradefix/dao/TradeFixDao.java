@@ -1,8 +1,7 @@
 package com.lbx.tradefix.dao;
 
-import com.lbx.tradefix.vo.FixDataVo;
-import com.lbx.tradefix.vo.ReportVo;
-import com.lbx.tradefix.vo.SAPInfo;
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.lbx.tradefix.vo.*;
 import com.lbx.tradefix.vo.query.FixDataQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,8 +13,10 @@ import java.util.List;
  * @date 2024/10/25
  **/
 @Mapper
+@DS("fix")
 public interface TradeFixDao {
     List<FixDataVo> findByCondition(FixDataQuery map);
+    List<FixDataVo> findXmByCondition(FixDataQuery map);
 
     int update(FixDataVo map);
 
@@ -28,4 +29,8 @@ public interface TradeFixDao {
     int updateReport(ReportVo vo);
 
     FixDataVo findByLine(Long line);
+
+    int insertFixResultStock(@Param("list") List<FixResultStock> list);
+
+    void insertFixResultStockLy(List<FixResultStockLy> stocks);
 }

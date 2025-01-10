@@ -1,5 +1,6 @@
 package com.lbx.tradefix.dao;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.lbx.tradefix.vo.FixDataVo;
 import com.lbx.tradefix.vo.SAPInfo;
 import com.lbx.tradefix.vo.query.SAPInfoQuery;
@@ -11,6 +12,7 @@ import java.util.List;
  * @author LiuY
  * @date 2024/10/25
  **/
+@DS("sap")
 @Mapper
 public interface SapDao {
 

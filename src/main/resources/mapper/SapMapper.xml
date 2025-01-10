@@ -12,7 +12,7 @@
         group by h.pbseqid,h.billtypeid,i.goodsid,i.fgtyp,i.price
     </select>
     <select id="selectSapDetail"  resultType="com.lbx.tradefix.vo.SAPInfo">
-        SELECT h.pbseqid,h.i.goodsid,i.total,i.fgtyp,h.billtypeid,i.price,i.poslineno,i.amount,i.cost,i.serial
+        SELECT h.pbseqid,h.i.goodsid,i.total,i.fgtyp,h.billtypeid,i.price,i.poslineno,i.amount,i.cost,i.serial,h.dateupload
         FROM T_SAP_POS_DETAIL_H h LEFT JOIN T_SAP_POS_DETAIL_I i ON h.PKID = i.PKID
         WHERE  h.pbseqid = #{billNo}
     </select>

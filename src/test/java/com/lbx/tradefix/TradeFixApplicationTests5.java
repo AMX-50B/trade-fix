@@ -38,7 +38,7 @@ public class TradeFixApplicationTests5 {
     @Test
     public void contextLoads() {
         ReportVo vo = new ReportVo();
-        vo.setStatus(-11);
+        vo.setStatus(-77);
 //        vo.setDeptid("1004");
 //        vo.setUdfcode(1160901085L);
         int i = 0;

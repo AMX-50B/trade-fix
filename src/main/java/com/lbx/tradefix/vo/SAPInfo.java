@@ -27,4 +27,5 @@ public class SAPInfo {
     private Double cost;
     private Double amount;
     private Long poslineno;
+
 }

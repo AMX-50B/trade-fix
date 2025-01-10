@@ -23,7 +23,9 @@ public interface TradeTiDBDao {
 
     OrderOutBoundVo getOutboundMain(OrderBoundQuery query);
 
-    List<OrderOutBoundVo> getOutboundDetail(@Param("outboundId") Long outboundId, @Param("wareInsideCode")Long wareInsideCode);
+    List<OrderOutBoundVo> getOutboundMainBatch(OrderBoundQuery query);
+
+    List<OrderOutBoundVo> getOutboundDetail(@Param("outboundId") Long outboundId, @Param("wareInsideCode") Long wareInsideCode);
 
     List<OrderOutBoundVo> selectOrderData(OrderQuery query);
 
@@ -31,7 +33,15 @@ public interface TradeTiDBDao {
 
     List<OrderOutBoundVo> selectPromotionData(OrderQuery query);
 
-    List<OrderOutBoundVo>  selectStockPurchaseSaleLog(OrderQuery orderQuery);
+    List<OrderOutBoundVo> selectStockPurchaseSaleLog(OrderQuery orderQuery);
 
     List<OrderOutBoundVo> selectCrmData(OrderQuery orderQuery);
+
+    List<OrderOutBoundVo> selectPromotionDataByCondition(OrderQuery query);
+
+    List<OrderOutBoundVo> selectOrderDataByCondition(OrderQuery query);
+
+    List<OrderOutBoundVo> selectGiftDataByCondition(OrderQuery query);
+
+    List<OrderOutBoundVo> selectCrmDataByCondition(OrderQuery query);
 }
