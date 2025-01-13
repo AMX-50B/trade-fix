@@ -17,7 +17,7 @@ public class DemoTest {
     public static void main(String[] args) {
         String path = DemoTest.class.getClassLoader().getResource("").getPath();
         // 需要查询ds的组织
-        String tagDs = "11949,10252,11823,10200,10771,10570,15374,14670,11568,10307,12471,15839,11593,10267,10314,10328,10289,10299,10258,18591,10188,10238,10241,10291,10295,10301,10596,10823,10824,10909,11107,11109,11181,11832,11853,11952,12271,12527,18593,18621,13818,13824,13825,13943,14245,14987,14990,15348,15821,583883";
+        String tagDs = "10187";
         Map<String,String> orgMap = new HashMap<>();
         for(String line : FileUtil.readLines(new File(path+"\\file\\org.txt"),
                 Charset.defaultCharset())){
